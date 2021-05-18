@@ -11,6 +11,8 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+app.use('/api/sign-up', require('./routes/user.route'));
+app.use('/api/sign-in', require('./routes/auth.route'));
 app.get('/err', function (req, res) {
     throw new Error('Error!');
   })
