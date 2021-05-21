@@ -11,6 +11,12 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+// anonymous
+app.use('/api/sign-up', require('./routes/user.route'));
+app.use('/api/sign-in', require('./routes/auth.route'));
+
+// admin
+app.use('/api/admin', require('./routes/user.admin.route'));
 app.get('/err', function (req, res) {
     throw new Error('Error!');
   })
