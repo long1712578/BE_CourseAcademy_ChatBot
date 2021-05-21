@@ -8,6 +8,7 @@ const router = express.Router();
 //signup
 router.post('/', async (req,res) => {
     const user = req.body;
+    user.is_delete =1;
     console.log(user.password);
     user.password = bcrypt.hashSync(user.password, 10);
 
