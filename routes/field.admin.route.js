@@ -1,5 +1,4 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 
 const fieldModel = require('../Models/course_field.model');
 
@@ -8,8 +7,10 @@ const router = express.Router();
 // add field
 router.post('/', async (req,res) => {
     const name = req.body.name;
+    const image = req.body.image;
     var field = {
         name: name,
+        image: image
     }
     var newField = await fieldModel.add(field);
     res.status(201).json(newField.id);

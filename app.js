@@ -20,6 +20,7 @@ app.use('/api/sign-in', require('./routes/auth.route'));
 app.use('/api/admin', require('./routes/user.admin.route'));
 app.use('/api/amin/category', require('./routes/category.admin.route'));
 app.use('/api/admin/field', require('./routes/field.admin.route'));
+app.use('/api/course', require('./routes/course.route'));
 app.get('/err', function (req, res) {
     throw new Error('Error!');
   })

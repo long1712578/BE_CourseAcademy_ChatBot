@@ -21,11 +21,11 @@ router.delete('/user-register/:id', async (req,res) => {
     if(listUser === null){
         return res.status(204).json('user not exist!!!');
     }else{
-        listUser.array.forEach(element => {
-            if( element.user_id === id){
+        for(let user of listUser){
+            if(user.user_id === id){
                 check = true;
             }
-        });
+        }
     }
     if(check === false){
         return res.status(204).json('Can user delete before!!!');
@@ -34,7 +34,7 @@ router.delete('/user-register/:id', async (req,res) => {
     return res.json(id);
 });
 // Get list teacher
-router.get('/teacher-register', async (req,res) => {
+router.get('/teacher', async (req,res) => {
     var listTeacher = await userModel.getAllTeacher();
     if(listTeacher === null){
         return res.status(204).json('Not teacher.');
@@ -42,7 +42,7 @@ router.get('/teacher-register', async (req,res) => {
     return res.json(listTeacher);
 });
 // delete teacher
-router.delete('/teacher-register/:id', async (req,res) => {
+router.delete('/teacher/:id', async (req,res) => {
     const id = parseInt(req.params.id);
     var teacher = await userModel.getTeacherById(id);
     if (teacher === null){
