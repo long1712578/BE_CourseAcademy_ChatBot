@@ -1,5 +1,5 @@
 const db = require('../utils/db');
-const tbOrder = 'order_course';
+const tbOrder = 'course_order';
 const tbUser = 'user';
 module.exports = {
     // Get user had register

@@ -3,10 +3,10 @@ const mysql = require('mysql');
 const knex = require('knex')({
   client: 'mysql2',
   connection: {
-    host: '127.0.0.1',
-    user: 'root',
-    password: '',
-    database: 'course_academy',
+    host: 'remotemysql.com',
+    user: 'vO0WORyO3w',
+    password: 'ZQDtk88dCQ',
+    database: 'vO0WORyO3w',
     port: 3306
   },
   pool: { min: 0, max: 50 }
@@ -14,11 +14,11 @@ const knex = require('knex')({
   //Tao ket noi voi database
 function createConnection() {
   return mysql.createPool({
-      host: '127.0.0.1',
+      host: 'remotemysql.com',
       port: '3306',
-      user: 'root',
-      password: '',
-      database: 'course_academy',
+      user: 'vO0WORyO3w',
+      password: 'ZQDtk88dCQ',
+      database: 'vO0WORyO3w',
       connectionLimit: 50,
   });
 }

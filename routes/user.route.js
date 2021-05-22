@@ -9,9 +9,7 @@ const router = express.Router();
 router.post('/', async (req,res) => {
     const user = req.body;
     user.is_delete =1;
-    console.log(user.password);
     user.password = bcrypt.hashSync(user.password, 10);
-
     const ids = await userModel.add(user);
     user.id = ids[0];
     delete user.password;
