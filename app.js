@@ -1,4 +1,5 @@
 const express = require('express');
+const moment = require('moment');
 const morgan = require('morgan');
 require('express-async-errors');
 const cors = require('cors');
@@ -17,6 +18,8 @@ app.use('/api/sign-in', require('./routes/auth.route'));
 
 // admin
 app.use('/api/admin', require('./routes/user.admin.route'));
+app.use('/api/amin/category', require('./routes/category.admin.route'));
+app.use('/api/admin/field', require('./routes/field.admin.route'));
 app.get('/err', function (req, res) {
     throw new Error('Error!');
   })

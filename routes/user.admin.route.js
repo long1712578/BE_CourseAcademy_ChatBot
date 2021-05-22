@@ -14,7 +14,7 @@ router.get('/user-register', async (req,res) => {
     return res.json(listUser);
 });
 // Delete user had register
-router.put('/user-register/delete/:id', async (req,res) => {
+router.delete('/user-register/:id', async (req,res) => {
     const id = parseInt(req.params.id);
     let check = false;
     var listUser = await orderModel.getAllRegisteredUsers();
@@ -42,7 +42,7 @@ router.get('/teacher-register', async (req,res) => {
     return res.json(listTeacher);
 });
 // delete teacher
-router.put('/teacher-register/delete/:id', async (req,res) => {
+router.delete('/teacher-register/:id', async (req,res) => {
     const id = parseInt(req.params.id);
     var teacher = await userModel.getTeacherById(id);
     if (teacher === null){
