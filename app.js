@@ -18,8 +18,8 @@ app.use('/api/sign-in', require('./routes/auth.route'));
 
 // admin
 app.use('/api/admin', require('./routes/user.admin.route'));
-app.use('/api/amin/category', require('./routes/category.admin.route'));
-app.use('/api/admin/field', require('./routes/field.admin.route'));
+app.use('/api/category', require('./routes/category.route'));
+app.use('/api/field', require('./routes/field.route'));
 app.use('/api/course', require('./routes/course.route'));
 app.get('/err', function (req, res) {
     throw new Error('Error!');
@@ -40,5 +40,5 @@ app.get('/err', function (req, res) {
   
   const PORT = 3000;
   app.listen(PORT, function () {
-    console.log(`Udemy api is running at http://localhost:${PORT}`);
+    console.log(`Academy api is running at http://localhost:${PORT}`);
   })
