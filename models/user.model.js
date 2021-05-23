@@ -38,6 +38,8 @@ module.exports = {
     patchRFToken(id, rfToken) {
       return db.knex('user').where('id', id).update('rfToken', rfToken);
     },
+  // update user -> teacher
+  
   //Check value of refeshtoken
     async isValidRFToken(id, rfToken) {
       const list = await db.knex('users').where('id', id).andWhere('rfToken', rfToken);
