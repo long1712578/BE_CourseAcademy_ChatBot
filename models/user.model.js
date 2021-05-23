@@ -7,7 +7,7 @@ module.exports = {
     },
     // delete user
     delete(id) {
-        return db.patch('is_delete = false', `id = ${id}`, 'user');
+      return db.knex('user').where('id', id).update('is_delete', true);
     },
     //Get user by username
     async singleByUserName(username) {
@@ -20,19 +20,19 @@ module.exports = {
     },
     //Get teacher
     async getAllTeacher() {
-        const teachers = await db.knex('user').where({ 'role_id': 2, 'is_delete': true });
-        if (teachers.length === 0) {
-            return null;
-        }
-        return teachers;
+      const teachers = await db.knex('user').where({'role_id': 2, 'is_delete': false});
+      if(teachers.length === 0){
+        return null;
+      }
+      return teachers;
     },
     //Get teacher by id
     async getTeacherById(id) {
-        const teacher = await db.knex('user').where({ 'id': id, 'role_id': 2, 'is_delete': true });
-        if (teacher.length === 0) {
-            return null;
-        }
-        return teacher[0];
+      const teacher = await db.knex('user').where({'id': id, 'role_id': 2, 'is_delete': false});
+      if(teacher.length === 0){
+        return null;
+      }
+      return teacher[0];
     },
     // update refeshtoken
     patchRFToken(id, rfToken) {

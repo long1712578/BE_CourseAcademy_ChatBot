@@ -30,13 +30,13 @@ module.exports = {
         }
         return course[0];
     },
-    delete(id) {
-        return db.patch('is_delete = false', `id = ${id}`, tbCourse);
+    delete(id){
+        return db.knex(tbCourse).where('id', id).update('is_delete', true); 
     },
     add(course) {
-        return db.add(tbCourse, course);
+        return db.knex(tbCourse).insert(course);
     },
     update(id, data) {
-        return db.patch(course, `{is_delete = false, id = ${id}`, tbCourse); py
+        return db.knex(tbCourse).where({id, is_delete: false}).update(data);
     }
 }
