@@ -21,7 +21,7 @@ router.delete('/:id', async (req,res) => {
     const id = parseInt(req.params.id);
     const course = await courseModel.single(id);
     if(course === null){
-        res.status(204).json();
+        res.status(204).json({message: 'delete fail because course no exist'});
     }
     await courseModel.delete(id);
     return res.json();

@@ -1,7 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 
-const categoryModel = require('../Models/category.model');
+const categoryModel = require('../models/category.model');
+const courseModel = require('../models/course.model');
 
 const router = express.Router();
 
@@ -21,7 +22,11 @@ router.delete('/:id', async (req,res) => {
     const id = parseInt(req.params.id);
     const category = await categoryModel.single(id);
     if( category === null){
-        res.status(204).json();
+        res.status(204).json({message: 'Delete fail because category not exist!!!'});
+    }
+    const courses = await courseModel.getCoursesByCategoryId(id);
+    if(courses.length === 0){
+        res.status(204).json({message: 'Delete fail bacause category had courses!!!'})
     }
     await categoryModel.delete(id);
     return res.json();

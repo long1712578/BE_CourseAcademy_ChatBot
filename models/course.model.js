@@ -31,6 +31,6 @@ module.exports = {
         return course[0];
     },
     delete(id){
-        return db.patch('is_delete = false', `id = ${id}`, tbCourse);  
+        return db.knex(tbCourse).where('id', id).update('is_delete', true); 
     }
 }
