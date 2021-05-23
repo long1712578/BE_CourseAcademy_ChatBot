@@ -1,0 +1,39 @@
+{
+  "required": [
+    "fullname",
+    "username",
+    "address",
+    "email",
+    "phone",
+    "gender",
+    "date_of_birth",
+    "avatar"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "fullname": {
+      "type": "string"
+    },
+    "username": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "gender": {
+      "type": "string"
+    },
+    "date_of_birth": {
+      "type": "datetime"
+    },
+    "avatar": {
+      "type": "string"
+    }
+  }
+}
