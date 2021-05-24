@@ -4,6 +4,7 @@ module.exports = {
     all() {
         return db('course')
     },
+    //view home/dashboard
     async mostHighLight() {
         let currentDate = moment();
         let startdate = currentDate.subtract(7, "days");
@@ -39,9 +40,12 @@ module.exports = {
 
         return courseMostRegis;
     },
+
+    //see information
+
     async informationCourse(id) {
         const inforCourse = await db.select('*').from('course').where('id', id)
-        return inforCourse;
+        return inforCourse[0];
     },
     async mostBuySameCategory(id) {
         const sameCateInfor = await db(
@@ -62,5 +66,9 @@ module.exports = {
         ;
 
         return sameCateInfor;
+    },
+    async teacherCreate(id){
+        const teacherInfor=db.select('user.*').from('course').where('course.id',id).rightJoin('user','course.created_by','user.id')
+        return teacherInfor;
     }
 }
