@@ -10,10 +10,7 @@ router.get('/', async function (req, res) {
     } catch {
         res.status('400').json('Can not get all course ')
     }
-    if (listCourse !== null) {
-        res.json(listCourse);
-    } else
-        res.status('200').json('Course is empty')
+    res.json(listCourse);
 
 })
 
@@ -24,10 +21,7 @@ router.get('/most-view', async function (req, res) {
     } catch {
         res.status('400').json('Can not get course have most view')
     }
-    if (listCourseMost !== null) {
-        res.json(listCourseMost);
-    } else
-        res.status('200').json('Most view is empty')
+    res.json(listCourseMost);
 })
 router.get('/new-course', async function (req, res) {
     let listCourseMost;
@@ -36,10 +30,7 @@ router.get('/new-course', async function (req, res) {
     } catch {
         res.status('400').json('Can not get top new course')
     }
-    if (listCourseMost !== null) {
-        res.json(listCourseMost);
-    } else
-        res.status('200').json('New course is empty')
+    res.json(listCourseMost);
 })
 
 router.get('/most-regis', async function (req, res) {
@@ -49,10 +40,7 @@ router.get('/most-regis', async function (req, res) {
     } catch {
         res.status('400').json('Can not get top registration in week ')
     }
-    if (listCourseMost !== null) {
-        res.json(listCourseMost);
-    } else
-        res.status('200').json('Top registration in week is empty')
+    res.json(listCourseMost);
 })
 
 router.get('/most-highlight', async function (req, res) {
@@ -62,13 +50,11 @@ router.get('/most-highlight', async function (req, res) {
     } catch {
         res.status('400').json('Can not get top highlight in week ')
     }
-    if (listCourseMost !== null) {
-        res.json(listCourseMost);
-    } else
-        res.status('200').json('Top highlights in week is empty')
+    res.json(listCourseMost);
+
 })
 
-router.get('/:id', async function (req, res) {
+router.get('/:id/infor', async function (req, res) {
     const id = req.params.id;
     let inforCourse;
     try {
@@ -77,32 +63,31 @@ router.get('/:id', async function (req, res) {
         res.status('400').json('Can not get information course')
     }
     //const sameCategoryCourseMostBuy=await courseModel.mostBuySameCategory(id);
-
-    console.log(inforCourse)
-    if (!inforCourse) {
-        res.json('Course find not found');
-    } else
-        res.json(inforCourse);
+    res.json(inforCourse);
 })
 
 router.get('/:id/same-category-most-buy', async function (req, res) {
     const id = req.params.id;
-    //const inforCourse=await courseModel.informationCourse(id);
-    const sameCategoryCourseMostBuy = await courseModel.mostBuySameCategory(id);
-    if (sameCategoryCourseMostBuy !== null) {
-        res.json(sameCategoryCourseMostBuy);
-    } else
-        res.status('200').json('Same category most buy find not found')
+    let sameCategoryCourseMostBuy
+    try{
+         sameCategoryCourseMostBuy = await courseModel.mostBuySameCategory(id);
+    } catch {
+        res.status('400').json('Can not get same category most buy')
+    }
+
+    res.json(sameCategoryCourseMostBuy);
+
 })
 router.get('/:id/teacher', async function (req, res) {
         const id = req.params.id;
-        //const inforCourse=await courseModel.informationCourse(id);
-        //const sameCategoryCourseMostBuy=await courseModel.mostBuySameCategory(id);
-        const inforTeacher = await courseModel.teacherCreate(id)
-        if (!inforTeacher)
-            res.json('Teacher of course find not found')
-        else
-            res.json(inforTeacher);
+        let inforTeacher;
+        try{
+            inforTeacher = await courseModel.teacherCreate(id)
+        }catch {
+            res.status('400').json('Can not get teacher of course')
+        }
+
+        res.json(inforTeacher);
     }
 )
 module.exports = router;
