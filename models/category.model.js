@@ -15,7 +15,6 @@ module.exports = {
             return null;
         }
         var last_update = moment().format('YYYY-MM-DD HH:mm:ss');
-        //await db.patch(`name = '${name}', last_update = '${last_update}'`, `id = ${id}`, tbCategory);
         await db.knex(tbCategory).where('id', id).update({name: name, last_update: last_update});
     },
     async single(id){

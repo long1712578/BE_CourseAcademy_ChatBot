@@ -24,7 +24,7 @@ module.exports = {
         return courses;
     },
     async single(id) {
-        const course = await db.knex(tbCourse).where({ 'is_delete': true, 'id': id });
+        const course = await db.knex(tbCourse).where({ 'is_delete': false, 'id': id });
         if (course.length === 0) {
             return null;
         }

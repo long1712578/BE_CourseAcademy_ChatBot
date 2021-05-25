@@ -37,7 +37,7 @@ router.put('/:id', async (req,res) => {
     const name = req.body.name;
     const result = await categoryModel.update(id, name);
     if(result === null){
-        return res.status(400).json();
+        return res.status(400).json({messagge_err: 'Update no success'});
     }
     return res.json();
 })
