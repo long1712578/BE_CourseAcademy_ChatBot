@@ -23,7 +23,7 @@ app.get('/', function (req, res) {
 //anonymous
 app.use('/api/anonymous/course', require('./routes/anonymous/course.route'));
 app.use('/api/anonymous/list-course', require('./routes/anonymous/category.route'));
-app.use('/api/user', require('./routes/user/like.route'));
+app.use('/api/user', require('./routes/user/user.route'));
 
 app.get('/err', function (req, res) {
     throw new Error('Error!');

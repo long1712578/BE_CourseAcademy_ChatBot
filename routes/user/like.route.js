@@ -3,9 +3,9 @@ const likeModel = require('../../model/user/like.model');
 const router = express.Router();
 
 //get user isLike course
-router.get('/:idUser/:idCourse', async function (req, res) {
-    const idUser=req.params.idUser;
-    const idCourse=req.params.idCourse;
+router.get('/is-like', async function (req, res) {
+    const idUser=req.body.idUser;
+    const idCourse=req.body.idCourse;
     let isLike;
     try {
         isLike = await likeModel.isLike(idUser,idCourse)
@@ -15,5 +15,6 @@ router.get('/:idUser/:idCourse', async function (req, res) {
     res.json(isLike);
 
 })
+
 
 module.exports =router;

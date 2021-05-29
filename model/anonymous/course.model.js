@@ -15,7 +15,7 @@ module.exports = {
             .avg('rating as rat').groupBy('course_id')
             .orderBy('rat', 'desc')
             .limit(4).rightJoin('course', 'rating.course_id', 'course.id').as('t1'))
-            .select('*').where('t1.is_delete',0)
+            .select('*').where('t1.is_delete', 0)
 
         return courseMostHighLight;
     },
@@ -35,7 +35,7 @@ module.exports = {
                 .where('enroll_at', '>=', new Date(startDate))
                 .count('course_id as number').groupBy('course_id')
                 .rightJoin('course', 'course_order.course_id', 'course.id')
-                .where('course.is_delete',0)
+                .where('course.is_delete', 0)
                 .rightJoin('category', 'course.category_id', 'category.id')
                 .groupBy('category.id').as('t1'))
             .select('t1.category_id')
@@ -47,33 +47,31 @@ module.exports = {
     //see information
 
     async informationCourse(id) {
-        const inforCourse = await db.select('*').from('course').where('id', id).andWhere('is_delete',0)
-        return inforCourse[0];
+        return await db.select('*').from('course').where('id', id).andWhere('is_delete', 0)
     },
     async mostBuySameCategory(id) {
         const sameCateInfor = await db(
             db.select('course_2.*')
                 .from('course as course_1')
                 .where('course_1.id', id)
-                .andWhere('course_1.is_delete','0')
+                .andWhere('course_1.is_delete', '0')
                 .rightJoin('course as course_2', 'course_1.category_id', 'course_2.category_id')
-                .where('course_2.is_delete','0')
+                .where('course_2.is_delete', '0')
                 .whereNot('course_2.id', id).as('t1'))
-                .select('t1.*')
-                .leftJoin('course_order','t1.id','course_order.course_id')
-                .count('t1.id as countEnroll')
-                .groupBy('t1.id')
-                .orderBy('countEnroll','desc').limit(5);
+            .select('t1.*')
+            .leftJoin('course_order', 't1.id', 'course_order.course_id')
+            .count('t1.id as countEnroll')
+            .groupBy('t1.id')
+            .orderBy('countEnroll', 'desc').limit(5);
         ;
-
         return sameCateInfor;
     },
-    async teacherCreate(id){
-        const teacherInfor=await db.select('user.*')
+    async teacherCreate(id) {
+        const teacherInfor = await db.select('user.*')
             .from('course')
-            .where('course.id',id)
-            .andWhere('course.is_delete','0')
-            .rightJoin('user','course.created_by','user.id')
+            .where('course.id', id)
+            .andWhere('course.is_delete', '0')
+            .rightJoin('user', 'course.created_by', 'user.id')
         return teacherInfor;
     }
 }
