@@ -24,19 +24,22 @@ module.exports = {
         return courses;
     },
     async single(id) {
-        const course = await db.knex(tbCourse).where({ 'is_delete': true, 'id': id });
+        const course = await db.knex(tbCourse).where({ 'is_delete': false, 'id': id });
         if (course.length === 0) {
             return null;
         }
         return course[0];
     },
-    delete(id){
-        return db.knex(tbCourse).where('id', id).update('is_delete', true); 
+    delete(id) {
+        return db.knex(tbCourse).where('id', id).update('is_delete', true);
     },
     add(course) {
         return db.knex(tbCourse).insert(course);
     },
     update(id, data) {
-        return db.knex(tbCourse).where({id, is_delete: false}).update(data);
+        return db.knex(tbCourse).where({ id, is_delete: false }).update(data);
+    },
+    save(data) {
+        return db.knex(tbCourse).save(data);
     }
 }

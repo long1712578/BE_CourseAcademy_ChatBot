@@ -4,6 +4,8 @@ const morgan = require('morgan');
 require('express-async-errors');
 const cors = require('cors');
 
+const globalErrorHandler = require('./controllers/error.controller');
+const AppError = require('./utils/app_error');
 const auth = require('./middlewares/auth.mdw');
 
 const app = express();
@@ -22,10 +24,18 @@ app.use('/api/category', require('./routes/category.route'));
 app.use('/api/field', require('./routes/field.route'));
 app.use('/api/course', require('./routes/course.route'));
 app.use('/api/user', require('./routes/user.route'));
+app.use('/api/video', require('./routes/video.route'));
+
 
 app.get('/err', function (req, res) {
   throw new Error('Error!');
 })
+
+// app.all('*', (req, res, next) => {
+//   return next(new AppError(`Can't find ${req.originalUrl} on server`, 400));
+// });
+
+
 
 app.use(function (req, res, next) {
   res.status(404).json({
@@ -33,12 +43,8 @@ app.use(function (req, res, next) {
   });
 })
 
-app.use(function (err, req, res, next) {
-  console.error(err.stack);
-  res.status(500).json({
-    error_message: 'Something broke!'
-  });
-})
+app.use(globalErrorHandler);
+
 
 
 
