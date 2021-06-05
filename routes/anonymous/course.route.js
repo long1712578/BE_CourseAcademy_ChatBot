@@ -18,6 +18,7 @@ router.get('/', async function (req, res) {
 
 })
 
+//Hiển thị 10 khoá học được xem nhiều nhất (ở mọi lĩnh vực)
 router.get('/most-view', async function (req, res) {
     let listCourseMost;
     try {
@@ -31,6 +32,8 @@ router.get('/most-view', async function (req, res) {
     }
     res.json(listCourseMost);
 })
+
+//Hiển thị 10 khoá học mới nhất (ở mọi lĩnh vực)
 router.get('/new-course', async function (req, res) {
     let listCourseMost;
     try {
@@ -45,6 +48,7 @@ router.get('/new-course', async function (req, res) {
     res.json(listCourseMost);
 })
 
+//Hiển thị danh sách lĩnh vực được đăng ký học nhiều nhất trong tuần qua
 router.get('/most-regis', async function (req, res) {
     let listCourseMost;
     try {
@@ -59,6 +63,7 @@ router.get('/most-regis', async function (req, res) {
     res.json(listCourseMost)
 })
 
+//Hiển thị 3-4 khoá học nổi bật nhất trong tuần qua
 router.get('/most-highlight', async function (req, res) {
     let listCourseMost;
     try {
@@ -74,6 +79,9 @@ router.get('/most-highlight', async function (req, res) {
 
 })
 
+
+//Xem chi tiết khoá học
+//thông tin của một khóa học
 router.get('/:id/infor', async function (req, res) {
     const id = req.params.id||0;
     let inforCourse;
@@ -89,6 +97,7 @@ router.get('/:id/infor', async function (req, res) {
     res.json(inforCourse);
 })
 
+//5 khoá học khác cùng lĩnh vực được mua nhiều nhất
 router.get('/:id/same-category-most-buy', async function (req, res) {
     const id = req.params.id||0;
     let sameCategoryCourseMostBuy
@@ -105,6 +114,8 @@ router.get('/:id/same-category-most-buy', async function (req, res) {
     res.json(sameCategoryCourseMostBuy);
 
 })
+
+//Thông tin giảng viên
 router.get('/:id/teacher', async function (req, res) {
         const id = req.params.id||0;
         let inforTeacher;
@@ -121,4 +132,21 @@ router.get('/:id/teacher', async function (req, res) {
     res.json(inforTeacher);
     }
 )
+
+// Danh sách feedback của học viên về khoá học
+router.get('/:id/feedback',async function (req,res){
+    const id = req.params.id||0;
+    let listFeedback;
+    try{
+        listFeedback = await courseModel.listFeedback(id)
+    }catch {
+        res.status('400').json('Can not get list feedback of course')
+    }
+    if(listFeedback.length<1)
+    {
+        res.status(200).json('No comment of course');
+    }
+
+    res.json(listFeedback);
+})
 module.exports = router;

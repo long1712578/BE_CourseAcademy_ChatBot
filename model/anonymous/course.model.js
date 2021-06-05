@@ -73,5 +73,11 @@ module.exports = {
             .andWhere('course.is_delete', '0')
             .rightJoin('user', 'course.created_by', 'user.id')
         return teacherInfor;
+    },
+
+    async listFeedback(id){
+        const listFeedback=await  db.select('user_id','comment').from('rating').where('course_id',id);
+        return listFeedback;
     }
+
 }
