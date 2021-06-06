@@ -99,10 +99,7 @@ app.use(function (req, res, next) {
 
 app.use(globalErrorHandler);
 
-
-
-
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, function () {
   console.log(`Academy api is running at http://localhost:${PORT}`);
 })
