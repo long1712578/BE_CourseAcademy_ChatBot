@@ -33,7 +33,7 @@ app.use('/api/anonymous/course', require('./routes/anonymous/course.route'));
 app.use('/api/anonymous/list-course', require('./routes/anonymous/category.route'));
 
 //user
-app.use('/api/user', require('./routes/user/user.route'));
+//app.use('/api/user', require('./routes/user/user.route'));
 
 
 app.use(globalErrorHandler);

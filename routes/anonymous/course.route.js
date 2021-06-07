@@ -24,7 +24,7 @@ router.get('/most-view', async function (req, res) {
     try {
         listCourseMost = await courseModel.mostView();
     } catch {
-        res.status('400').json('Can not get course have most view')
+        res.status(400).json('Can not get course have most view')
     }
     if(listCourseMost.length<1)
     {
