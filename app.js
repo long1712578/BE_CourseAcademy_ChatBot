@@ -8,8 +8,10 @@ const globalErrorHandler = require('./controllers/error.controller');
 const AppError = require('./utils/app_error');
 const auth = require('./middlewares/auth.mdw');
 
-const app = express();
 
+
+
+const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
@@ -81,23 +83,23 @@ app.get('/webhook', (req, res) => {
 });
 
 
+//user
+//app.use('/api/user', require('./routes/user/user.route'));
+
+
+app.use(globalErrorHandler);
+
+
+
 app.get('/err', function (req, res) {
   throw new Error('Error!');
 })
-
-// app.all('*', (req, res, next) => {
-//   return next(new AppError(`Can't find ${req.originalUrl} on server`, 400));
-// });
-
-
 
 app.use(function (req, res, next) {
   res.status(404).json({
     error_message: 'Endpoint not found'
   });
 })
-
-app.use(globalErrorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, function () {
