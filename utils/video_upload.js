@@ -15,5 +15,4 @@ function isValidFile(filename, mimetype) {
         allowedMimeTypes.indexOf(mimetype) != -1;
 }
 
-
 module.exports = { getExtension, isValidFile };

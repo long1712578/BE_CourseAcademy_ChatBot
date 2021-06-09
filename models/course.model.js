@@ -1,37 +1,64 @@
-const { all } = require('../routes/user.route');
-const db = require('../utils/db');
-const tbCourse = 'course';
+const { all } = require("../routes/user.route");
+const db = require("../utils/db");
+const tbCourse = "course";
 
 module.exports = {
-    async all(filter,) {
-        const { page = 1, limit = 6, sort_by = "id", sort_type = 'asc', ...otherParams } = filter;
+    async all(filter) {
+        const {
+            page = 1,
+            limit = 6,
+            sort_by = "id",
+            sort_type = "asc",
+            search = "",
+            ...otherParams
+        } = filter;
         const offset = (page - 1) * limit;
-        const courses = await db.knex(tbCourse).where({ ...otherParams, is_delete: true }).limit(limit).offset(offset).orderBy(sort_by, sort_type);
-        const courses1 = await db.knex(tbCourse).where({ ...otherParams, is_delete: true });
-        const totalCourse = courses1.length;
-        const totalPage = Math.floor(totalCourse / limit) + 1;
+        const model = db
+            .knex("course")
+            .leftJoin("category", "course.category_id", "category.id")
+            .where({ ...otherParams, is_delete: true })
+            .where((qb) => {
+                search
+                    ? qb
+                        .andWhereRaw("MATCH(course.name) AGAINST(?)", search)
+                        .orWhereRaw("MATCH(category.name) AGAINST(?)", search)
+                    : {};
+            });
+
+        const totalCourse = await model.clone().count();
+        const courses = await model
+            .clone()
+            .offset(offset)
+            .limit(limit)
+            .select("course.*");
+        const totalPage = Math.floor(totalCourse[0]["count(*)"] / limit) + 1;
         return {
             totalPage,
-            courses
+            length: courses.length,
+            courses,
         };
     },
     async getCoursesByCategoryId(categoryId) {
-        var courses = db.knex(tbCourse).where({ 'category_id': categoryId, 'is_delete': true });
+        var courses = db
+            .knex(tbCourse)
+            .where({ category_id: categoryId, is_delete: true });
         return courses;
     },
     async getCoursesByFieldId(fieldId) {
-        var courses = db.knex(tbCourse).where({ 'course_field_id': fieldId, 'is_delete': true });
+        var courses = db
+            .knex(tbCourse)
+            .where({ course_field_id: fieldId, is_delete: true });
         return courses;
     },
     async single(id) {
-        const course = await db.knex(tbCourse).where({ 'is_delete': false, 'id': id });
+        const course = await db.knex(tbCourse).where({ is_delete: false, id: id });
         if (course.length === 0) {
             return null;
         }
         return course[0];
     },
     delete(id) {
-        return db.knex(tbCourse).where('id', id).update('is_delete', true);
+        return db.knex(tbCourse).where("id", id).update("is_delete", true);
     },
     add(course) {
         return db.knex(tbCourse).insert(course);
@@ -41,5 +68,5 @@ module.exports = {
     },
     save(data) {
         return db.knex(tbCourse).save(data);
-    }
-}
+    },
+};
