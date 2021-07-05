@@ -10,10 +10,6 @@ router.get('/', async function (req, res) {
     } catch {
         res.status(400).json('Can not get all course ')
     }
-    if(listCourse.length<1)
-    {
-        res.status(200).json('List course is empty')
-    }
     res.json(listCourse);
 
 })
@@ -26,10 +22,7 @@ router.get('/most-view', async function (req, res) {
     } catch {
         res.status(400).json('Can not get course have most view')
     }
-    if(listCourseMost.length<1)
-    {
-        res.status(200).json('List course most view is empty');
-    }
+
     res.json(listCourseMost);
 })
 
@@ -40,10 +33,6 @@ router.get('/new-course', async function (req, res) {
         listCourseMost = await courseModel.newCourse();
     } catch {
         res.status('400').json('Can not get top new course')
-    }
-    if(listCourseMost.length<1)
-    {
-        res.status(200).json('List course new is empty');
     }
     res.json(listCourseMost);
 })
@@ -56,10 +45,6 @@ router.get('/most-regis', async function (req, res) {
     } catch {
         res.status('400').json('Can not get top registration in week ')
     }
-    if(listCourseMost.length<1)
-    {
-        res.status(200).json('List course most registration is empty');
-    }
     res.json(listCourseMost)
 })
 
@@ -70,10 +55,6 @@ router.get('/most-highlight', async function (req, res) {
         listCourseMost = await courseModel.mostHighLight();
     } catch {
         res.status('400').json('Can not get top highlight in week ')
-    }
-    if(listCourseMost.length<1)
-    {
-        res.status(200).json('List course most high light is empty');
     }
     res.json(listCourseMost)
 

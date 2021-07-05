@@ -9,13 +9,13 @@ module.exports = {
         let currentDate = moment();
         let startDate = currentDate.subtract(7, "days");
         return db.knex
-        (db.knex.select('course.*')
+        (db.knex.select('course.*',)
             .from('rating')
             .where('create_at', '>=', new Date(startDate))
             .avg('rating as rat').groupBy('course_id')
             .orderBy('rat', 'desc')
             .limit(4).rightJoin('course', 'rating.course_id', 'course.id').as('t1'))
-            .select('*').where('t1.is_delete', 0);
+            .select('*','rat').where('t1.is_delete', 0);
     },
     mostView() {
         return db.knex('course').orderBy('view', 'desc').limit(10)
@@ -36,8 +36,9 @@ module.exports = {
                 .where('course.is_delete', 0)
                 .rightJoin('category', 'course.category_id', 'category.id')
                 .groupBy('category.id').as('t1'))
-            .select('t1.category_id')
-            .groupBy('t1.category_id').sum('t1.number as tNumber').orderBy('tNumber', 'desc');
+            .select('t1.category_id','category.name')
+            .groupBy('t1.category_id').sum('t1.number as tNumber').orderBy('tNumber', 'desc')
+            .leftJoin('category','category.id','category_id');
     },
 
     //see information
