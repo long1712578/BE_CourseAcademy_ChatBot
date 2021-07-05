@@ -22,11 +22,11 @@ app.use('/api/sign-in', require('./routes/auth.route'));
 
 // admin
 app.use('/api/admin', require('./routes/user.admin.route'));
-app.use('/api/category', require('./routes/category.route'));
-app.use('/api/field', require('./routes/field.route'));
-app.use('/api/course', require('./routes/course.route'));
-app.use('/api/user', require('./routes/user.route'));
-app.use('/api/video', require('./routes/video.route'));
+app.use('/api/categories', require('./routes/category.route'));
+app.use('/api/fields', require('./routes/field.route'));
+app.use('/api/courses', require('./routes/course.route'));
+app.use('/api/users', require('./routes/user.route'));
+app.use('/api/videos', require('./routes/video.route'));
 
 // Creates the endpoint for our webhook 
 app.post('/webhook', (req, res) => {
