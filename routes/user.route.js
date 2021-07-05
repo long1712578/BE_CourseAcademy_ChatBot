@@ -5,6 +5,15 @@ const userModel = require('../Models/user.model');
 
 const router = express.Router();
 
+router.get('/', async (req, res) => {
+    const filter = req.query;
+    const result = await userModel.all(filter);
+    if (result.totalPage === 0) {
+        return res.status(204).json();
+    }
+    return res.json(result);
+})
+
 //signup
 router.post('/', async (req, res) => {
     const user = req.body;
@@ -59,9 +68,9 @@ router.get('/:id', async function (req, res) {
 router.get('/:id/watch-list', async function (req, res) {
     const idUser = req.params.id;
     let watchList;
-   // try {
-        watchList = await userModel.watchList(idUser)
-        console.log(watchList);
+    // try {
+    watchList = await userModel.watchList(idUser)
+    console.log(watchList);
     // } catch {
     //     res.status('400').json('Can not get all course ')
     // }
@@ -99,14 +108,12 @@ router.post('/:id/like-course', async function (req, res) {
 router.get('/:id/list-course-enroll', async function (req, res) {
     const idUser = req.params.id || 0;
     let listCourseEnroll;
-    try
-    {
-        listCourseEnroll=await userModel.listCourseEnroll(idUser);
-    }catch {
+    try {
+        listCourseEnroll = await userModel.listCourseEnroll(idUser);
+    } catch {
         res.status(400).json('Can not get list course enroll');
     }
-    if(listCourseEnroll<1)
-    {
+    if (listCourseEnroll < 1) {
         res.status(200).json('List course enroll is empty');
     }
     res.json(listCourseEnroll);
@@ -134,10 +141,9 @@ router.get('/:id/study-course', async function (req, res) {
     } catch {
         res.status(400).json("Can't study this course")
     }
-    if(studyCourse.length>1)
-    {
+    if (studyCourse.length > 1) {
         res.json(studyCourse);
-    }else res.json("Student not regis course")
+    } else res.json("Student not regis course")
 
 })
 
@@ -147,28 +153,28 @@ router.post('/:id/rating-course', async function (req, res) {
     const idCourse = req.body.course_id;
     const comment = req.body.comment;
     const rating = req.body.rating;
-     try {
-        const ratingCourse = await userModel.ratingCourse(idUser, idCourse,comment,rating);
-     } catch {
-         res.status(400).json("Can't rating this course")
-     }
+    try {
+        const ratingCourse = await userModel.ratingCourse(idUser, idCourse, comment, rating);
+    } catch {
+        res.status(400).json("Can't rating this course")
+    }
     res.status(200).json("Rating this course success")
 })
 
 //get user isLike course
 router.get('/:id/is-like', async function (req, res) {
-    const idUser=req.params.id;
-    const idCourse=req.body.course_id;
+    const idUser = req.params.id;
+    const idCourse = req.body.course_id;
     let isLike;
     try {
-        isLike = await userModel.isLike(idUser,idCourse)
+        isLike = await userModel.isLike(idUser, idCourse)
         console.log(isLike)
     } catch {
         res.status(400).json('Can not get status like')
     }
-    if(isLike.length>1){
+    if (isLike.length > 1) {
         res.json(true);
-    }else res.json(false);
+    } else res.json(false);
 })
 
 module.exports = router;

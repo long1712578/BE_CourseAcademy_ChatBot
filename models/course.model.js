@@ -16,7 +16,7 @@ module.exports = {
         const model = db
             .knex("course")
             .leftJoin("category", "course.category_id", "category.id")
-            .where({ ...otherParams, is_delete: true })
+            .where({ ...otherParams, is_delete: false })
             .where((qb) => {
                 search
                     ? qb
