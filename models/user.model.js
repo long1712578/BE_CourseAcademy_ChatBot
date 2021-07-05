@@ -13,6 +13,7 @@ module.exports = {
         const offset = (page - 1) * limit;
         const model = db
             .knex("user")
+            .leftJoin("role", "role.id", "user.role_id")
             .where({ ...otherParams, is_delete: false });
 
         const totalUser = await model.clone().count();
@@ -20,7 +21,8 @@ module.exports = {
             .clone()
             .offset(offset)
             .limit(limit)
-            .select("user.*");
+            .select("*")
+            .options({ nestTables: true });;
         const totalPage = Math.floor(totalUser[0]["count(*)"] / limit) + 1;
         return {
             totalPage,

@@ -30,12 +30,13 @@ module.exports = {
             .clone()
             .offset(offset)
             .limit(limit)
-            .select("course.*");
+            .select('*')
+            .options({ nestTables: true });
         const totalPage = Math.floor(totalCourse[0]["count(*)"] / limit) + 1;
         return {
             totalPage,
             length: courses.length,
-            courses,
+            courses
         };
     },
     async getCoursesByCategoryId(categoryId) {
