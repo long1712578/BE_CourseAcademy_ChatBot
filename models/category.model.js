@@ -3,6 +3,9 @@ const moment = require('moment');
 const tbCategory = 'category';
 
 module.exports = {
+    all(){
+        return db.knex('category');
+    },
     add(category){
         return db.knex(tbCategory).insert(category);
     },

@@ -6,6 +6,11 @@ const courseModel = require('../models/course.model');
 
 const router = express.Router();
 
+router.get('/',async function (req,res){
+    const listCategory=await categoryModel.all();
+    res.json(listCategory);
+})
+
 // add category
 router.post('/', async (req,res) => {
     const name = req.body.name;
