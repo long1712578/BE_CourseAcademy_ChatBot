@@ -16,14 +16,15 @@ module.exports = {
         const model = db
             .knex("course")
             .leftJoin("category", "course.category_id", "category.id")
-            .where({ ...otherParams, is_delete: false })
+            .leftJoin("user","course.created_by","user.id")
+            .where({ ...otherParams, "course.is_delete": false })
             .where((qb) => {
                 search
                     ? qb
                         .andWhereRaw("MATCH(course.name) AGAINST(?)", search)
                         .orWhereRaw("MATCH(category.name) AGAINST(?)", search)
                     : {};
-            });
+            })
 
         const totalCourse = await model.clone().count();
         const courses = await model
