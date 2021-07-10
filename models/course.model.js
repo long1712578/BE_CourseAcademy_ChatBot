@@ -6,8 +6,8 @@ module.exports = {
     async all(filter,) {
         const { page = 1, limit = 6, sort_by = "id", sort_type = 'asc', ...otherParams } = filter;
         const offset = (page - 1) * limit;
-        const courses = await db.knex(tbCourse).where({ ...otherParams, is_delete: true }).limit(limit).offset(offset).orderBy(sort_by, sort_type);
-        const courses1 = await db.knex(tbCourse).where({ ...otherParams, is_delete: true });
+        const courses = await db.knex(tbCourse).where({ ...otherParams, is_delete: false }).limit(limit).offset(offset).orderBy(sort_by, sort_type);
+        const courses1 = await db.knex(tbCourse).where({ ...otherParams, is_delete: false });
         const totalCourse = courses1.length;
         const totalPage = Math.floor(totalCourse / limit) + 1;
         return {
@@ -16,11 +16,11 @@ module.exports = {
         };
     },
     async getCoursesByCategoryId(categoryId) {
-        var courses = db.knex(tbCourse).where({ 'category_id': categoryId, 'is_delete': true });
+        var courses = db.knex(tbCourse).where({ 'category_id': categoryId, 'is_delete': false });
         return courses;
     },
     async getCoursesByFieldId(fieldId) {
-        var courses = db.knex(tbCourse).where({ 'course_field_id': fieldId, 'is_delete': true });
+        var courses = db.knex(tbCourse).where({ 'course_field_id': fieldId, 'is_delete': false });
         return courses;
     },
     async single(id) {
