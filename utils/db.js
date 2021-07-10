@@ -9,9 +9,8 @@ const knex = require('knex')({
     database: 'vO0WORyO3w',
     port: 3306
   },
-  pool: { min: 0, max: 50 }
+  pool: { min: 0, max: 100 }
 });
-
 module.exports={
   knex
 }
