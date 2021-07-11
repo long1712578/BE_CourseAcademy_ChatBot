@@ -1,4 +1,3 @@
-const { all } = require("../routes/user.route");
 const db = require("../utils/db");
 const tbCourse = "course";
 

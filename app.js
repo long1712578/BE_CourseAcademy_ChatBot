@@ -20,6 +20,7 @@ app.use('/api/courses', require('./routes/course.route'));
 app.use('/api/users', require('./routes/user.route'));
 app.use('/api/videos', require('./routes/video.route'));
 app.use('/api/course_order', require('./routes/course_order.route'));
+app.use('/api/roles', require('./routes/role.route'));
 
 
 app.get('/err', function (req, res) {

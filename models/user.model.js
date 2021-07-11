@@ -36,7 +36,7 @@ module.exports = {
         return db.knex('user').insert(user);
     },
     // delete user
-    delete(id) {
+    async delete(id) {
         return db.knex('user').where('id', id).update('is_delete', true);
     },
     //Get user by username
