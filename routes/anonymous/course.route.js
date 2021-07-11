@@ -63,7 +63,7 @@ router.get('/most-highlight', async function (req, res) {
 
 //Xem chi tiết khoá học
 //thông tin của một khóa học
-router.get('/:id/infor', async function (req, res) {
+router.get('/information/:id', async function (req, res) {
     const id = req.params.id||0;
     let inforCourse;
     try {
@@ -71,63 +71,8 @@ router.get('/:id/infor', async function (req, res) {
     } catch {
         res.status('400').json('Can not get information course')
     }
-    if(inforCourse.length<1)
-    {
-        res.status(200).json('Can not get information course');
-    }
     res.json(inforCourse);
 })
 
-//5 khoá học khác cùng lĩnh vực được mua nhiều nhất
-router.get('/:id/same-category-most-buy', async function (req, res) {
-    const id = req.params.id||0;
-    let sameCategoryCourseMostBuy
-    try{
-         sameCategoryCourseMostBuy = await courseModel.mostBuySameCategory(id);
-    } catch {
-        res.status('400').json('Can not get same category most buy')
-    }
-    if(sameCategoryCourseMostBuy.length<1)
-    {
-        res.status(200).json('Can not get course same category most buy');
-    }
 
-    res.json(sameCategoryCourseMostBuy);
-
-})
-
-//Thông tin giảng viên
-router.get('/:id/teacher', async function (req, res) {
-        const id = req.params.id||0;
-        let inforTeacher;
-        try{
-            inforTeacher = await courseModel.teacherCreate(id)
-        }catch {
-            res.status('400').json('Can not get teacher of course')
-        }
-    if(inforTeacher.length<1)
-    {
-        res.status(200).json('Can not get teacher of course');
-    }
-
-    res.json(inforTeacher);
-    }
-)
-
-// Danh sách feedback của học viên về khoá học
-router.get('/:id/feedback',async function (req,res){
-    const id = req.params.id||0;
-    let listFeedback;
-    try{
-        listFeedback = await courseModel.listFeedback(id)
-    }catch {
-        res.status('400').json('Can not get list feedback of course')
-    }
-    if(listFeedback.length<1)
-    {
-        res.status(200).json('No comment of course');
-    }
-
-    res.json(listFeedback);
-})
 module.exports = router;

@@ -43,14 +43,15 @@ module.exports = {
 
     //see information
     async informationCourse(id) {
-        return db.knex.select('*')
+        const course=await db.knex.select('*')
             .from('course')
             .where('id', id)
             .andWhere('is_delete', 0);
-    },
-    async mostBuySameCategory(id) {
-        return db.knex(
-                db.knex.select('course_2.*')
+        const countRate=await db.knex.select('*')
+            .from('rating')
+            .where('course_id',id);
+        const mostBuySameCategory=await db.knex(
+            db.knex.select('course_2.*')
                 .from('course as course_1')
                 .where('course_1.id', id)
                 .andWhere('course_1.is_delete', '0')
@@ -62,17 +63,18 @@ module.exports = {
             .count('t1.id as countEnroll')
             .groupBy('t1.id')
             .orderBy('countEnroll', 'desc').limit(5);
-    },
-    async teacherCreate(id) {
-        return db.knex.select('user.*')
+        const teacher=await db.knex.select('user.*')
             .from('course')
             .where('course.id', id)
             .andWhere('course.is_delete', '0')
             .rightJoin('user', 'course.created_by', 'user.id');
+        const listFeedback=await db.knex.select('user_id', 'comment').from('rating').where('course_id', id);
+        return{
+            course,
+            countRate,
+            mostBuySameCategory,
+            teacher,
+            listFeedback
+        }
     },
-
-    async listFeedback(id){
-        return db.knex.select('user_id', 'comment').from('rating').where('course_id', id);
-    }
-
 }
