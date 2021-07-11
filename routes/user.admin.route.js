@@ -19,7 +19,7 @@ router.delete('/user-register/:id', async (req,res) => {
     let check = false;
     var listUser = await orderModel.getAllRegisteredUsers();
     if(listUser === null){
-        return res.status(204).json({message: 'user not exist!!!'});
+        return res.status(400).json({message: 'user not exist!!!'});
     }else{
         for(let user of listUser){
             if(user.user_id === id){
@@ -28,7 +28,7 @@ router.delete('/user-register/:id', async (req,res) => {
         }
     }
     if(check === false){
-        return res.status(204).json({message: 'Can user delete before!!!'});
+        return res.status(400).json({message: 'Can user delete before!!!'});
     }
     await userModel.delete(id);
     return res.json(id);
@@ -37,7 +37,7 @@ router.delete('/user-register/:id', async (req,res) => {
 router.get('/teacher', async (req,res) => {
     var listTeacher = await userModel.getAllTeacher();
     if(listTeacher === null){
-        return res.status(204).json('Not teacher.');
+        return res.status(400).json('Not teacher.');
     }
     return res.json(listTeacher);
 });
@@ -46,7 +46,7 @@ router.delete('/teacher/:id', async (req,res) => {
     const id = parseInt(req.params.id);
     var teacher = await userModel.getTeacherById(id);
     if (teacher === null){
-        return res.status(204).json('...');
+        return res.status(400).json({message: 'id no exist'});
     }
     await userModel.delete(id);
     return res.json(id);

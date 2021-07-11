@@ -18,6 +18,7 @@ module.exports = {
             .leftJoin("category", "course.category_id", "category.id")
             .leftJoin("user","course.created_by","user.id")
             .where({ ...otherParams, "course.is_delete": false })
+            .orderBy(`course.${sort_by}`, sort_type)
             .where((qb) => {
                 search
                     ? qb
@@ -41,19 +42,15 @@ module.exports = {
         };
     },
     async getCoursesByCategoryId(categoryId) {
-        var courses = db
-            .knex(tbCourse)
-            .where({ category_id: categoryId, is_delete: true });
+        var courses = db.knex(tbCourse).where({ 'category_id': categoryId, 'is_delete': false });
         return courses;
     },
     async getCoursesByFieldId(fieldId) {
-        var courses = db
-            .knex(tbCourse)
-            .where({ course_field_id: fieldId, is_delete: true });
+        var courses = db.knex(tbCourse).where({ 'course_field_id': fieldId, 'is_delete': false });
         return courses;
     },
     async single(id) {
-        const course = await db.knex(tbCourse).where({ is_delete: false, id: id });
+        const course = await db.knex(tbCourse).where({ 'is_delete': false, 'id': id });
         if (course.length === 0) {
             return null;
         }
