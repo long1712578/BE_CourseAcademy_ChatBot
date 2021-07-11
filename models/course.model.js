@@ -1,4 +1,3 @@
-const { all } = require("../routes/user.route");
 const db = require("../utils/db");
 const tbCourse = "course";
 
@@ -7,7 +6,7 @@ module.exports = {
         const {
             page = 1,
             limit = 6,
-            sort_by = "id",
+            sort_by = "course.id",
             sort_type = "asc",
             search = "",
             ...otherParams
@@ -31,6 +30,7 @@ module.exports = {
             .clone()
             .offset(offset)
             .limit(limit)
+            .orderBy(sort_by, sort_type)
             .select('*')
             .options({ nestTables: true });
         const totalPage = Math.floor(totalCourse[0]["count(*)"] / limit) + 1;

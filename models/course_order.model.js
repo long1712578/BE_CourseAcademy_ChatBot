@@ -5,7 +5,7 @@ module.exports = {
         const {
             page = 1,
             limit = 6,
-            sort_by = "id",
+            sort_by = "course_order.id",
             sort_type = "asc",
             search = "",
             ...otherParams
@@ -13,6 +13,8 @@ module.exports = {
         const offset = (page - 1) * limit;
         const model = db
             .knex("course_order")
+            .leftJoin("user", "course_order.user_id", "user.id")
+            .leftJoin("course", "course_order.course_id", "course.id")
             .where({ ...otherParams })
 
         const totalCourseOrder = await model.clone().count();
@@ -20,7 +22,9 @@ module.exports = {
             .clone()
             .offset(offset)
             .limit(limit)
-            .select("course_order.*");
+            .orderBy(sort_by, sort_type)
+            .select("*")
+            .options({ nestTables: true });
         const totalPage = Math.floor(totalCourseOrder[0]["count(*)"] / limit) + 1;
         return {
             totalPage,
