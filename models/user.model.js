@@ -5,7 +5,7 @@ module.exports = {
         const {
             page = 1,
             limit = 6,
-            sort_by = "id",
+            sort_by = "user.id",
             sort_type = "asc",
             search = "",
             ...otherParams
@@ -21,8 +21,9 @@ module.exports = {
             .clone()
             .offset(offset)
             .limit(limit)
+            .orderBy(sort_by, sort_type)
             .select("*")
-            .options({ nestTables: true });;
+            .options({ nestTables: true });
         const totalPage = Math.floor(totalUser[0]["count(*)"] / limit) + 1;
         return {
             totalPage,
@@ -35,7 +36,7 @@ module.exports = {
         return db.knex('user').insert(user);
     },
     // delete user
-    delete(id) {
+    async delete(id) {
         return db.knex('user').where('id', id).update('is_delete', true);
     },
     //Get user by username
