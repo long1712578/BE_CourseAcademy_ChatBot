@@ -5,8 +5,8 @@ module.exports = {
         return await db.knex('video').leftJoin("course", "video.course_id", "course.id").select('*')
             .options({ nestTables: true });;
     },
-    add(data) {
-        return db.knex('video').insert(data);
+    async add(data) {
+        return await db.knex('video').insert(data);
     },
     async single(id) {
         const course = await db.knex('video').where({ id: id });

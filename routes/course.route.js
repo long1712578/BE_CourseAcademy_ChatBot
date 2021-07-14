@@ -2,12 +2,16 @@ const express = require('express');
 
 const courseModel = require('../Models/course.model');
 const fs = require("fs");
-const sha1 = require("sha1");
 const formidable = require("formidable");
 const mv = require("mv");
 
-const { isValidFile, getExtension } = require('./../utils/video_upload');
+const { isValidFileVideo, getExtension, isValidFileDocument } = require('../utils/upload');
 const videoModel = require('./../models/video.model');
+const documentModel = require('../models/document.model');
+
+const dirVideoUpload = '/../uploads/video/';
+const dirDocumentUpload = '/../uploads/document/';
+const dirImageUpload = '/../uploads/image/';
 
 const router = express.Router();
 
@@ -60,21 +64,17 @@ router.post('/:id', async (req, res) => {
     console.log("route add course");
     return res.status(200);
 });
-// router.post('/:id/upload-video', courseController.uploadVideoForCourse);
+
 router.post('/:id/upload-video', async (req, res) => {
-
     const form = formidable({ multiples: true, keepExtensions: true });
-
     const courseId = req.params.id;
-    // const name = req.body.name;
-
 
     let promise = new Promise((resolve, reject) => {
         let videoData = [];
 
         form.onPart = (part) => {
-            if (!isValidFile(part.filename, part.mime)) {
-                reject(new Error({ message: "Please upload upload video file type was accepted include mp4, webpm, ogg!!" }));
+            if (!isValidFileVideo(part.filename, part.mime)) {
+                reject({ 'message': "Please upload upload video file type was accepted include mp4, webpm, ogg!!" });
             }
             form.handlePart(part);
         }
@@ -85,20 +85,18 @@ router.post('/:id/upload-video', async (req, res) => {
                 res.status(404).json({ message: err });
             }
 
-            let listFile = Object.values(files)[0];
-            listFile.forEach(file => {
-
-                const randomFileName = sha1(new Date().getTime()) + "." + getExtension(file.name);
-                const dir = __dirname + '/../uploads/' + courseId;
-                if (!fs.existsSync(dir)) {
-                    fs.mkdirSync(dir);
-                }
-                mv(file.path, dir + '/' + randomFileName, (err) => {
-                    reject(new Error({ message: "Cannot move file" }));
-                });
-
-                videoData.push({ name: randomFileName, course_id: courseId, url: dir });
+            let file = Object.values(files)[0];
+            const randomFileName = new Date().getTime() + "." + getExtension(file.name);
+            const dir = __dirname + dirVideoUpload + courseId;
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+            }
+            mv(file.path, dir + '/' + randomFileName, (err) => {
+                reject(new Error({ message: "Cannot move file" }));
             });
+
+            videoData.push({ name: randomFileName, course_id: courseId, url: dir });
+
             resolve(videoData);
         });
     });
@@ -107,9 +105,60 @@ router.post('/:id/upload-video', async (req, res) => {
         if (data) {
             const videos = await videoModel.add(data);
             if (videos)
-                res.status(201).json({ message: "Add video successfully" });
+                res.status(201).json({ message: "Add video successfully", video: videos });
             else
                 throw new Error({ message: "Add video failed" });
+        }
+    }).catch(err => {
+        res.status(400).json({ message: err.message })
+    })
+
+});
+
+router.post('/:id/upload-document', async (req, res) => {
+    const form = formidable({ multiples: true, keepExtensions: true });
+    const courseId = req.params.id;
+
+    let promise = new Promise((resolve, reject) => {
+        let documentData = [];
+
+        form.onPart = (part) => {
+            if (!isValidFileDocument(part.filename, part.mime)) {
+                reject({ 'message': "Please upload upload document file type was accepted include txt, doc, pdf!!" });
+            }
+            form.handlePart(part);
+        }
+
+
+        form.parse(req, (err, fields, files) => {
+            if (err) {
+                res.status(404).json({ message: err });
+            }
+
+            let file = Object.values(files)[0];
+
+            const randomFileName = new Date().getTime() + "." + getExtension(file.name);
+            const dir = __dirname + dirDocumentUpload + courseId;
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+            }
+            mv(file.path, dir + '/' + randomFileName, (err) => {
+                reject(new Error({ message: "Cannot move file" }));
+            });
+
+            documentData.push({ name: randomFileName, course_id: courseId, url: dir });
+
+            resolve(documentData);
+        });
+    });
+
+    promise.then(async (data) => {
+        if (data) {
+            const documents = await documentModel.add(data);
+            if (documents)
+                res.status(201).json({ message: "Add document successfully", documents: documents });
+            else
+                throw new Error({ message: "Add document failed" });
         }
     }).catch(err => {
         res.status(400).json({ message: err.message })
