@@ -32,4 +32,23 @@ module.exports = {
             courseOrders,
         };
     },
+    async single(id) {
+        const course = await db.knex('course_order').where({ id: id });
+        if (course.length === 0) {
+            return null;
+        }
+        return course[0];
+    },
+    delete(id) {
+        return db.knex('course_order').where("id", id).delete();
+    },
+    add(order) {
+        return db.knex('course_order').insert(order);
+    },
+    update(id, data) {
+        return db.knex('course_order').where({ id }).update(data);
+    },
+    save(data) {
+        return db.knex('course_order').save(data);
+    },
 };

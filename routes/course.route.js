@@ -20,6 +20,32 @@ router.get('/', async (req, res) => {
     return res.json(result);
 });
 
+router.post('/', async (req, res) => {
+    const course = req.body;
+    course.is_delete = false;
+    const ids = await courseModel.add(course);
+    course.id = ids[0];
+    res.status(201).json(course);
+});
+
+router.get('/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const course = await courseModel.single(id);
+    if (course === null) {
+        return res.status(204);
+    }
+    return res.json(course);
+});
+
+router.put('/:id', async (req, res) => {
+    const id = req.params.id * 1 || 0;
+    const data = req.body;
+    const result = await courseModel.update(id, data);
+    if (result == null) res.status(400).json({ message: "Course is exist" });
+    if (result > 0) res.status(200).json({ message: result + " row change" });
+    else res.status(202).json({ message: "No change" });
+});
+
 router.delete('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
     const course = await courseModel.single(id);
@@ -29,6 +55,7 @@ router.delete('/:id', async (req, res) => {
     await courseModel.delete(id);
     return res.json();
 });
+
 router.post('/:id', async (req, res) => {
     console.log("route add course");
     return res.status(200);
