@@ -5,6 +5,23 @@ const courseModel = require("../models/course.model");
 
 const router = express.Router();
 
+router.get('/', async (req, res) => {
+  const result = await fieldModel.all();
+  if (result.totalPage === 0) {
+    return res.status(204).json();
+  }
+  return res.json(result);
+})
+
+router.get('/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const field = await fieldModel.single(id);
+  if (field === null) {
+    return res.status(204);
+  }
+  return res.json(field);
+});
+
 // add field
 router.post("/", async (req, res) => {
   const name = req.body.name;

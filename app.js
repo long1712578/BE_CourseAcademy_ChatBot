@@ -55,10 +55,10 @@ app.use('/api/fields', require('./routes/field.route'));
 app.use('/api/courses', require('./routes/course.route'));
 app.use('/api/users', require('./routes/user.route'));
 app.use('/api/videos', require('./routes/video.route'));
-app.use('/api/course_order', require('./routes/course_order.route'));
+app.use('/api/orders', require('./routes/course_order.route'));
 app.use('/api/roles', require('./routes/role.route'));
 app.use('/api/guest-course', require('./routes/anonymous/course.route'));
-
+app.use('/api/documents', require('./routes/document.route'));
 app.get('/err', function (req, res) {
   throw new Error('Error!');
 })
