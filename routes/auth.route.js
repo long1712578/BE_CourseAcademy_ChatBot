@@ -10,18 +10,11 @@ const router = express.Router();
 //Login
 router.post('/', async (req,res) => {
     const user = await userModel.singleByUserName(req.body.username);
-    console.log(user);
     if(user === null) {
-        return res.json({
-            authenticated: false
-        });
+        res.status(400).json("Use not exist");
     }
-    console.log(user.password);
-    console.log(req.body.password);
     if(!bcrypt.compareSync(req.body.password, user.password)){
-        return res.json({
-            authenticated: false
-        });
+        res.status(400).json("Password fail");
     }
     const payLoad = {
         userId: user.id
