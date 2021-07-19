@@ -48,6 +48,14 @@ module.exports = {
 
         return users[0];
     },
+    async singleById(id){
+        const user = await db.knex('user').where('id', id);
+        if (user.length === 0) {
+            return null;
+        }
+
+        return user[0];
+    },
     //Get teacher
     async getAllTeacher() {
         const teachers = await db.knex('user').where({ 'role_id': 2, 'is_delete': false });

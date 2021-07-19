@@ -17,7 +17,13 @@ router.post('/', async (req,res) => {
         res.status(400).json("Password fail");
     }
     const payLoad = {
-        userId: user.id
+        userId: user.id,
+        fullName: user.fullname,
+        userName: user.username,
+        address: user.address,
+        phone: user.phone,
+        birthDate: user.date_of_birth,
+        email: user.email,
     };
 
     const opts = {

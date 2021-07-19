@@ -33,6 +33,24 @@ router.put('/:id', async (req, res) => {
     if (result == null) res.status(400).json({ message: "Username is exist" });
     if (result > 0) res.status(200).json({ message: result + " row change" });
     else res.status(202).json({ message: "No change" });
+});
+
+router.put('/:id/password', async (req,res) => {
+    const id = req.params.id;
+    const newPass =req.body.newPass;
+    const oldPass = req.body.oldPass;
+
+    const user = await  userModel.singleById(id);
+    console.log(user);
+    //Kiem tra password cu chinh sat khong
+    if(!bcrypt.compareSync(oldPass, user.password)){
+        res.status(400).json("Password fail");
+    };
+    const password = bcrypt.hashSync(newPass, 10);
+    const result = await userModel.updateUser(id, {password: password});
+    if (result > 0) res.status(200).json({ message: "Chang success" });
+    else res.status(400).json({ message: "Change fail" });
+
 })
 
 router.delete('/:id', async (req, res) => {
