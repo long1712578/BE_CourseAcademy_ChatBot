@@ -15,14 +15,14 @@ module.exports = {
         const model = db
             .knex("course")
             .leftJoin("category", "course.category_id", "category.id")
-            .leftJoin("user","course.created_by","user.id")
+            .leftJoin("user", "course.created_by", "user.id")
             .where({ ...otherParams, "course.is_delete": false })
             .orderBy(`course.${sort_by}`, sort_type)
             .where((qb) => {
                 search
                     ? qb
-                        .andWhereRaw("MATCH(course.name) AGAINST(?)", search)
-                        .orWhereRaw("MATCH(category.name) AGAINST(?)", search)
+                        .andWhereRaw("MATCH(course.name) AGAINST(? IN NATURAL LANGUAGE MODE)", search)
+                        .orWhereRaw("MATCH(category.name) AGAINST(? IN NATURAL LANGUAGE MODE)", search)
                     : {};
             })
 
