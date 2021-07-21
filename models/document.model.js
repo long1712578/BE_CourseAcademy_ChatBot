@@ -2,8 +2,9 @@ const db = require('../utils/db');
 
 module.exports = {
     async all() {
+        // 
         return await db.knex('document').leftJoin("course", "document.course_id", "course.id").select('*')
-            .options({ nestTables: true });;
+            .options({ nestTables: true });
     },
     async add(data) {
         return await db.knex('document').insert(data);
