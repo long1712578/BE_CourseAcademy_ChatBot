@@ -5,13 +5,10 @@ const fs = require("fs");
 const formidable = require("formidable");
 const mv = require("mv");
 
-const { isValidFileVideo, getExtension, isValidFileDocument } = require('../utils/upload');
+const { isValidFileVideo, getExtension, isValidFileDocument, multerUpload, isValidFileImage } = require('../utils/upload');
 const videoModel = require('./../models/video.model');
 const documentModel = require('../models/document.model');
-
-const dirVideoUpload = '/../uploads/video/';
-const dirDocumentUpload = '/../uploads/document/';
-const dirImageUpload = '/../uploads/image/';
+const uploadFileToFirebase = require('../utils/firebase');
 
 const router = express.Router();
 
@@ -24,12 +21,24 @@ router.get('/', async (req, res) => {
     return res.json(result);
 });
 
-router.post('/', async (req, res) => {
-    const course = req.body;
-    course.is_delete = false;
-    const ids = await courseModel.add(course);
-    course.id = ids[0];
-    res.status(201).json(course);
+const courseSchema = require('./../schemas/course.json');
+router.post('/', multerUpload.single('image'), require('../middlewares/validate.mdw')(courseSchema), async (req, res) => {
+    try {
+        const data = { ...req.body, is_delete: false };
+        if (req.file) {
+            if (!isValidFileImage(req.file.originalname, req.file.mimetype)) {
+                return res.status(400).json({ 'message': "Please upload file image type was accepted include png, jpg, jpeg!!" })
+            }
+            const url = await uploadFileToFirebase(req.file);
+            data.image = url;
+        }
+        const ids = await courseModel.add(data);
+        data.id = ids[0];
+        const course = await courseModel.single(data.id);
+        res.status(201).json(course);
+    } catch (err) {
+        res.status(400).json(err);
+    }
 });
 
 router.get('/:id', async (req, res) => {
@@ -41,13 +50,24 @@ router.get('/:id', async (req, res) => {
     return res.json(course);
 });
 
-router.put('/:id', async (req, res) => {
-    const id = req.params.id * 1 || 0;
-    const data = req.body;
-    const result = await courseModel.update(id, data);
-    if (result == null) res.status(400).json({ message: "Course is exist" });
-    if (result > 0) res.status(200).json({ message: result + " row change" });
-    else res.status(202).json({ message: "No change" });
+router.put('/:id', multerUpload.single('image'), async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const data = { ...req.body, is_delete: false };
+        if (req.file) {
+            if (!isValidFileImage(req.file.originalname, req.file.mimetype)) {
+                return res.status(400).json({ 'message': "Please upload file image type was accepted include png, jpg, jpeg!!" })
+            }
+            const url = await uploadFileToFirebase(req.file);
+            data.image = url;
+        }
+        const result = await courseModel.update(id, data);
+        if (result == null) res.status(400).json({ message: "Course is exist" });
+        if (result > 0) res.status(200).json({ message: result + " row change" });
+        else res.status(202).json({ message: "No change" });
+    } catch (err) {
+        res.status(400).json(err);
+    }
 });
 
 router.delete('/:id', async (req, res) => {
@@ -70,7 +90,6 @@ router.post('/:id/upload-video', async (req, res) => {
     const courseId = req.params.id;
 
     let promise = new Promise((resolve, reject) => {
-        let videoData = [];
 
         form.onPart = (part) => {
             if (!isValidFileVideo(part.filename, part.mime)) {
@@ -78,8 +97,6 @@ router.post('/:id/upload-video', async (req, res) => {
             }
             form.handlePart(part);
         }
-
-
         form.parse(req, (err, fields, files) => {
             if (err) {
                 res.status(404).json({ message: err });
@@ -94,7 +111,6 @@ router.post('/:id/upload-video', async (req, res) => {
             mv(file.path, dir + '/' + randomFileName, (err) => {
                 reject(new Error({ message: "Cannot move file" }));
             });
-
             videoData.push({ name: randomFileName, course_id: courseId, url: dir });
 
             resolve(videoData);

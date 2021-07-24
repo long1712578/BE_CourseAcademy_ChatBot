@@ -24,7 +24,7 @@ module.exports = {
             .orderBy(sort_by, sort_type)
             .select("*")
             .options({ nestTables: true });
-        const totalPage = Math.floor(totalUser[0]["count(*)"] / limit) + 1;
+        const totalPage = Math.ceil(totalUser[0]["count(*)"] / limit);
         return {
             totalPage,
             length: users.length,
@@ -48,7 +48,7 @@ module.exports = {
 
         return users[0];
     },
-    async singleById(id){
+    async singleById(id) {
         const user = await db.knex('user').where('id', id);
         if (user.length === 0) {
             return null;

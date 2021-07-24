@@ -1,5 +1,3 @@
-
-
 // Gets a filename extension.
 function getExtension(filename) {
     return filename.split(".").pop();
@@ -37,4 +35,17 @@ function isValidFileDocument(filename, mimetype) {
     return isValidFile(filename, mimetype, allowedExts, allowedMimeTypes)
 }
 
-module.exports = { getExtension, isValidFileVideo, isValidFileImage, isValidFileDocument };
+
+const multer = require('multer');
+var storage = multer.memoryStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+})
+
+var multerUpload = multer({ storage: storage })
+
+module.exports = { getExtension, isValidFileVideo, isValidFileImage, isValidFileDocument, multerUpload };
