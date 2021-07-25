@@ -1,0 +1,99 @@
+{
+  "required": [
+    "name",
+    "created_by",
+    "course_status_id",
+    "price",
+    "course_field_id"
+  ],
+  "properties": {
+    "name": {
+      "$id": "#root/name",
+      "title": "Name",
+      "type": "string",
+      "default": "",
+      "examples": ["course_test"],
+      "pattern": "^.*$"
+    },
+    "description": {
+      "$id": "#root/description",
+      "title": "Description",
+      "type": "null",
+      "default": null
+    },
+    "rating_average": {
+      "$id": "#root/rating_average",
+      "title": "Rating_average",
+      "type": "integer",
+      "examples": [0],
+      "default": 0
+    },
+    "image": {
+      "$id": "#root/image",
+      "title": "Image",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "https://firebasestorage.googleapis.com/v0/b/becourseacademy.appspot.com/o/image%2Fimage-1627117894178.png?alt=media&token=9b660429-c1a4-4eed-9b7a-491655036c93"
+      ],
+      "pattern": "^.*$"
+    },
+    "category_id": {
+      "$id": "#root/category_id",
+      "title": "Category_id",
+
+      "examples": [1],
+      "default": 1
+    },
+    "created_by": {
+      "$id": "#root/created_by",
+      "title": "Created_by",
+
+      "examples": [1],
+      "default": 1
+    },
+    "course_status_id": {
+      "$id": "#root/course_status_id",
+      "title": "Course_status_id",
+      "examples": [1],
+      "default": 0
+    },
+    "price": {
+      "$id": "#root/price",
+      "title": "Price",
+      "examples": [0],
+      "default": 0
+    },
+    "view": {
+      "$id": "#root/view",
+      "title": "View",
+      "examples": [0],
+      "default": 0
+    },
+    "is_delete": {
+      "$id": "#root/is_delete",
+      "title": "Is_delete",
+      "type": "boolean",
+      "examples": [false],
+      "default": true
+    },
+    "promotion_price": {
+      "$id": "#root/promotion_price",
+      "title": "Promotion_price",
+      "type": "null",
+      "default": null
+    },
+    "summary": {
+      "$id": "#root/summary",
+      "title": "Summary",
+      "type": "null",
+      "default": null
+    },
+    "course_field_id": {
+      "$id": "#root/course_field_id",
+      "title": "Course_field_id",
+      "examples": [1],
+      "default": 0
+    }
+  }
+}

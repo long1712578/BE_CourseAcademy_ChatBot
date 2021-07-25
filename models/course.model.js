@@ -33,7 +33,7 @@ module.exports = {
             .limit(limit)
             .select('*')
             .options({ nestTables: true });
-        const totalPage = Math.floor(totalCourse[0]["count(*)"] / limit) + 1;
+        const totalPage = Math.ceil(totalCourse[0]["count(*)"] / limit);
         return {
             totalPage,
             length: courses.length,

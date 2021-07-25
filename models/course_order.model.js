@@ -25,7 +25,7 @@ module.exports = {
             .orderBy(sort_by, sort_type)
             .select("*")
             .options({ nestTables: true });
-        const totalPage = Math.floor(totalCourseOrder[0]["count(*)"] / limit) + 1;
+        const totalPage = Math.ceil(totalCourseOrder[0]["count(*)"] / limit);
         return {
             totalPage,
             length: courseOrders.length,
