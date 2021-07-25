@@ -3,9 +3,9 @@ const moment = require('moment');
 const tbCategory = 'category';
 
 module.exports = {
-    async all(filter) {
-        const { limit = 999 } = filter;
-        return await db.knex('category').limit(limit);
+    async all() {
+       // const { limit = 999 } = filter;
+        return await db.knex('category');
     },
     async add(category) {
         return await db.knex(tbCategory).insert(category);

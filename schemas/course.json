@@ -18,8 +18,8 @@
     "description": {
       "$id": "#root/description",
       "title": "Description",
-      "type": "null",
-      "default": null
+      "type": "string",
+      "default": ""
     },
     "rating_average": {
       "$id": "#root/rating_average",
@@ -80,14 +80,14 @@
     "promotion_price": {
       "$id": "#root/promotion_price",
       "title": "Promotion_price",
-      "type": "null",
-      "default": null
+      "examples": [0],
+      "default": 0
     },
     "summary": {
       "$id": "#root/summary",
       "title": "Summary",
-      "type": "null",
-      "default": null
+      "type": "string",
+      "default": ""
     },
     "course_field_id": {
       "$id": "#root/course_field_id",
