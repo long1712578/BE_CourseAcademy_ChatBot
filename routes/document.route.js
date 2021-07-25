@@ -5,7 +5,8 @@ const { isValidFileDocument, multerUpload } = require('../utils/upload');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    const result = await documentModel.all();
+    const filter = req.query;
+    const result = await documentModel.all(filter);
     if (result.totalPage === 0) {
         return res.status(204).json();
     }
