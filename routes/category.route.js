@@ -7,7 +7,8 @@ const courseModel = require('../models/course.model');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    const result = await categoryModel.all();
+    const filter = req.query;
+    const result = await categoryModel.all(filter);
     if (result.totalPage === 0) {
         return res.status(204).json();
     }
@@ -43,7 +44,7 @@ router.delete('/:id', async (req, res) => {
         return res.status(204).json({ message: 'Delete fail because category not exist!!!' });
     }
     const courses = await courseModel.getCoursesByCategoryId(id);
-    if (courses.length === 0) {
+    if (courses.length > 0) {
         return res.status(204).json({ message: 'Delete fail bacause category had courses!!!' })
     }
     await categoryModel.delete(id);

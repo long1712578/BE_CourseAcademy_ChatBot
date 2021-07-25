@@ -38,13 +38,13 @@ router.delete("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const field = await fieldModel.single(id);
   if (field === null) {
-    res.status(400).json({ message: "Delete fail because fail not exist!!!" });
+    return res.status(400).json({ message: "Delete fail because field not exist!!!" });
   }
   const courses = await courseModel.getCoursesByFieldId(id);
-  if (courses.length === 0) {
-    res
+  if (courses.length > 0) {
+    return res
       .status(400)
-      .json({ message: "Delete fail because Field had course!!!" });
+      .json({ message: "Delete fail because field had course!!!" });
   }
   await fieldModel.delete(id);
   return res.json();

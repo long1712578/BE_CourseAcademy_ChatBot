@@ -15,14 +15,14 @@ module.exports = {
         const model = db
             .knex("course")
             .leftJoin("category", "course.category_id", "category.id")
-            .leftJoin("user","course.created_by","user.id")
+            .leftJoin("user", "course.created_by", "user.id")
             .where({ ...otherParams, "course.is_delete": false })
             .orderBy(`course.${sort_by}`, sort_type)
             .where((qb) => {
                 search
                     ? qb
-                        .andWhereRaw("MATCH(course.name) AGAINST(?)", search)
-                        .orWhereRaw("MATCH(category.name) AGAINST(?)", search)
+                        .andWhereRaw("MATCH(course.name) AGAINST(? IN NATURAL LANGUAGE MODE)", search)
+                        .orWhereRaw("MATCH(category.name) AGAINST(? IN NATURAL LANGUAGE MODE)", search)
                     : {};
             })
 
@@ -33,7 +33,7 @@ module.exports = {
             .limit(limit)
             .select('*')
             .options({ nestTables: true });
-        const totalPage = Math.floor(totalCourse[0]["count(*)"] / limit) + 1;
+        const totalPage = Math.ceil(totalCourse[0]["count(*)"] / limit);
         return {
             totalPage,
             length: courses.length,
@@ -41,11 +41,11 @@ module.exports = {
         };
     },
     async getCoursesByCategoryId(categoryId) {
-        var courses = db.knex(tbCourse).where({ 'category_id': categoryId, 'is_delete': false });
+        const courses = await db.knex(tbCourse).where({ 'category_id': categoryId, 'is_delete': false });
         return courses;
     },
     async getCoursesByFieldId(fieldId) {
-        var courses = db.knex(tbCourse).where({ 'course_field_id': fieldId, 'is_delete': false });
+        const courses = await db.knex(tbCourse).where({ 'course_field_id': fieldId, 'is_delete': false });
         return courses;
     },
     async single(id) {

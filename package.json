@@ -26,11 +26,13 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-session": "^1.17.2",
+    "firebase": "^8.8.0",
     "formidable": "^1.2.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.6",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
+    "multer": "^1.4.2",
     "mv": "^2.1.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
@@ -39,6 +41,7 @@
     "passport-facebook": "^3.0.0",
     "passport-google-oauth": "^2.0.0",
     "randomstring": "^1.2.1",
+    "request": "^2.88.2",
     "sha1": "^1.1.1",
     "util": "^0.12.3"
   }

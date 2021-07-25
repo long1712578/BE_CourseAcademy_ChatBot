@@ -1,14 +1,57 @@
 const express = require('express');
 const documentModel = require('../models/document.model');
+const uploadFileToFirebase = require('../utils/firebase');
+const { isValidFileDocument, multerUpload } = require('../utils/upload');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    const result = await documentModel.all();
+    const filter = req.query;
+    const result = await documentModel.all(filter);
     if (result.totalPage === 0) {
         return res.status(204).json();
     }
     return res.json(result);
-})
+});
+
+router.post('/', multerUpload.single('url'), async (req, res) => {
+    try {
+        const data = { ...req.body, is_delete: false };
+        if (req.file) {
+            if (!isValidFileDocument(req.file.originalname, req.file.mimetype)) {
+                return res.status(400).json({ 'message': "Please upload file document type was accepted include doc, pdf, txt!!" })
+            }
+            const url = await uploadFileToFirebase(req.file);
+            data.url = url;
+        }
+        const ids = await documentModel.add(data);
+        data.id = ids[0];
+        const doc = await documentModel.single(data.id);
+        res.status(201).json(doc);
+    } catch (err) {
+        res.status(400).json(err);
+    }
+});
+
+router.put('/:id', multerUpload.single('url'), async (req, res) => {
+    try {
+        const id = req.params.id * 1 || 0;
+        const data = { ...req.body, is_delete: false };
+        if (req.file) {
+            if (!isValidFileDocument(req.file.originalname, req.file.mimetype)) {
+                return res.status(400).json({ 'message': "Please upload file document type was accepted include doc, pdf, txt!!" })
+            }
+            const url = await uploadFileToFirebase(req.file);
+            data.url = url;
+        }
+        const result = await documentModel.update(id, data);
+        if (result == null) res.status(400).json({ message: "Document is exist" });
+        if (result > 0) res.status(200).json({ message: result + " row change" });
+        else res.status(202).json({ message: "No change" });
+    } catch (err) {
+        res.status(400).json(err);
+    }
+
+});
 
 router.get('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
@@ -19,14 +62,6 @@ router.get('/:id', async (req, res) => {
     return res.json(doc);
 });
 
-router.put('/:id', async (req, res) => {
-    const id = req.params.id * 1 || 0;
-    const data = req.body;
-    const result = await documentModel.update(id, data);
-    if (result == null) res.status(400).json({ message: "Document is exist" });
-    if (result > 0) res.status(200).json({ message: result + " row change" });
-    else res.status(202).json({ message: "No change" });
-});
 
 router.delete('/:id', async (req, res) => {
     const id = parseInt(req.params.id);

@@ -1,5 +1,4 @@
 const db = require('../utils/db');
-const moment = require('moment');
 const tbField = 'course_field';
 
 module.exports = {
