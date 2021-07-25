@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 });
 
 const courseSchema = require('./../schemas/course.json');
-router.post('/', multerUpload.single('image'), require('../middlewares/validate.mdw')(courseSchema), async (req, res) => {
+router.post('/', multerUpload.single('image'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
         if (req.file) {

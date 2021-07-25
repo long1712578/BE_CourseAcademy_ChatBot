@@ -41,11 +41,11 @@ module.exports = {
         };
     },
     async getCoursesByCategoryId(categoryId) {
-        var courses = db.knex(tbCourse).where({ 'category_id': categoryId, 'is_delete': false });
+        const courses = await db.knex(tbCourse).where({ 'category_id': categoryId, 'is_delete': false });
         return courses;
     },
     async getCoursesByFieldId(fieldId) {
-        var courses = db.knex(tbCourse).where({ 'course_field_id': fieldId, 'is_delete': false });
+        const courses = await db.knex(tbCourse).where({ 'course_field_id': fieldId, 'is_delete': false });
         return courses;
     },
     async single(id) {
