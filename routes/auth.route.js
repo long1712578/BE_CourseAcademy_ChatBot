@@ -27,7 +27,7 @@ router.post('/', async (req,res) => {
     };
 
     const opts = {
-        expiresIn: 10 * 60 // seconds(10p)
+        expiresIn: 24 * 60 *60 // seconds(1 ngay)
     }
     const accessToken = jwt.sign(payLoad, authConfig.secret, opts);
     const refreshToken = random.generate(50);
