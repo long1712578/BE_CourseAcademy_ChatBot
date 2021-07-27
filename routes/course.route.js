@@ -21,7 +21,6 @@ router.get('/', async (req, res) => {
     return res.json(result);
 });
 
-const courseSchema = require('./../schemas/course.json');
 router.post('/', multerUpload.single('image'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };

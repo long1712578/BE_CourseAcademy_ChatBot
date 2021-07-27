@@ -1,6 +1,7 @@
 const express = require('express');
 const { multerUpload, isValidFileVideo } = require('../utils/upload');
 const videoModel = require('./../models/video.model');
+const uploadFileToFirebase = require('../utils/firebase')
 
 const router = express.Router();
 
