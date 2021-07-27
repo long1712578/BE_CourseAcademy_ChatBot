@@ -35,7 +35,7 @@ router.post('/', multerUpload.single('url'), async (req, res) => {
         const ids = await videoModel.add(data);
         data.id = ids[0];
         const video = await videoModel.single(data.id);
-        res.status(201).json(video);
+        res.status(200).json(video);
     } catch (err) {
         res.status(400).json(err);
     }
@@ -54,7 +54,7 @@ router.put('/:id', multerUpload.single('url'), async (req, res) => {
         }
         const result = await videoModel.update(id, data);
         if (result == null) res.status(400).json({ message: "Video is exist" });
-        if (result > 0) res.status(200).json({ message: result + " row change" });
+        if (result > 0) res.status(201).json({ message: result + " row change" });
         else res.status(202).json({ message: "No change" });
     } catch (err) {
         res.status(400).json(err);
