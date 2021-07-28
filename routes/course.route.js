@@ -21,7 +21,6 @@ router.get('/', async (req, res) => {
     return res.json(result);
 });
 
-const courseSchema = require('./../schemas/course.json');
 router.post('/', multerUpload.single('image'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
@@ -35,7 +34,7 @@ router.post('/', multerUpload.single('image'), async (req, res) => {
         const ids = await courseModel.add(data);
         data.id = ids[0];
         const course = await courseModel.single(data.id);
-        res.status(201).json(course);
+        res.status(200).json(course);
     } catch (err) {
         res.status(400).json(err);
     }

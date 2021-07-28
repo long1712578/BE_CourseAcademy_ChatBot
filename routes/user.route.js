@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 
 const userModel = require('../Models/user.model');
+const { multerUpload, isValidFileImage } = require('../utils/upload');
+const uploadFileToFirebase = require('../utils/firebase');
 
 const router = express.Router();
 
@@ -26,28 +28,35 @@ router.post('/', async (req, res) => {
     res.status(201).json(user);
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', multerUpload.single('avatar'), async (req, res) => {
     const id = req.params.id * 1 || 0;
     const data = req.body;
+    if (req.file) {
+        if (!isValidFileImage(req.file.originalname, req.file.mimetype)) {
+            return res.status(400).json({ 'message': "Please upload file image type was accepted include png, jpg, jpeg!!" })
+        }
+        const url = await uploadFileToFirebase(req.file);
+        data.avatar = url;
+    }
     const result = await userModel.updateUser(id, data);
     if (result == null) res.status(400).json({ message: "Username is exist" });
     if (result > 0) res.status(200).json({ message: result + " row change" });
     else res.status(202).json({ message: "No change" });
 });
 
-router.put('/:id/password', async (req,res) => {
+router.put('/:id/password', async (req, res) => {
     const id = req.params.id;
-    const newPass =req.body.newPass;
+    const newPass = req.body.newPass;
     const oldPass = req.body.oldPass;
 
-    const user = await  userModel.singleById(id);
+    const user = await userModel.singleById(id);
     console.log(user);
     //Kiem tra password cu chinh sat khong
-    if(!bcrypt.compareSync(oldPass, user.password)){
+    if (!bcrypt.compareSync(oldPass, user.password)) {
         res.status(400).json("Password fail");
     };
     const password = bcrypt.hashSync(newPass, 10);
-    const result = await userModel.updateUser(id, {password: password});
+    const result = await userModel.updateUser(id, { password: password });
     if (result > 0) res.status(200).json({ message: "Chang success" });
     else res.status(400).json({ message: "Change fail" });
 
@@ -214,5 +223,28 @@ router.get('/:id/is-like/:course_id', async function (req, res) {
         res.json(false);
     }
 })
+
+router.post('/add-new-user', multerUpload.single('avatar'), async (req, res) => {
+    try {
+        const data = { ...req.body, is_delete: false };
+        data.password = bcrypt.hashSync(data.password, 10);
+        console.log(req.file);
+        if (req.file) {
+            if (!isValidFileImage(req.file.originalname, req.file.mimetype)) {
+                return res.status(400).json({ 'message': "Please upload file image type was accepted include png, jpg, jpeg!!" })
+            }
+            const url = await uploadFileToFirebase(req.file);
+            data.avatar = url;
+        }
+        const ids = await userModel.add(data);
+        data.id = ids[0];
+        const user = await userModel.singleById(data.id);
+        delete user.password;
+        res.status(201).json(user);
+    } catch (err) {
+        console.log(err);
+        res.status(400).json(err);
+    }
+});
 
 module.exports = router;
