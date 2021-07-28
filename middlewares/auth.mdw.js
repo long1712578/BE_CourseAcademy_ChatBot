@@ -2,10 +2,12 @@ const authConfig = require('../config/auth.config');
 const jwt =require('jsonwebtoken');
 
 module.exports = function (req, res, next) {
-    const accessToken = req.headers['x-access-token'];
+  console.log('header', req.headers.authorization);
+    const accessToken = req.headers.authorization;
     if (accessToken) {
       try {
         const decoded = jwt.verify(accessToken, authConfig.secret);
+        console.log("decode", decoded);
         req.accessTokenPayload = decoded;
         next();
       } catch (err) {

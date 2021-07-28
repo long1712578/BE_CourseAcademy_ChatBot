@@ -8,6 +8,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const config = require('./config/login.config');
+const authMdw = require('./middlewares/auth.mdw');
 
 const app = express();
 app.use(cors());
@@ -49,18 +50,18 @@ app.use('/api/sign-up', require('./routes/user.route'));
 app.use('/api/sign-in', require('./routes/auth.route'));
 
 // admin
-app.use('/api/admin', require('./routes/user.admin.route'));
-app.use('/api/categories', require('./routes/category.route'));
-app.use('/api/fields', require('./routes/field.route'));
-app.use('/api/courses', require('./routes/course.route'));
-app.use('/api/users', require('./routes/user.route'));
-app.use('/api/videos', require('./routes/video.route'));
-app.use('/api/orders', require('./routes/course_order.route'));
-app.use('/api/roles', require('./routes/role.route'));
+app.use('/api/admin', authMdw,require('./routes/user.admin.route'));
+app.use('/api/categories',authMdw, require('./routes/category.route'));
+app.use('/api/fields',authMdw, require('./routes/field.route'));
+app.use('/api/courses',authMdw, require('./routes/course.route'));
+app.use('/api/users',authMdw, require('./routes/user.route'));
+app.use('/api/videos',authMdw, require('./routes/video.route'));
+app.use('/api/orders',authMdw, require('./routes/course_order.route'));
+app.use('/api/roles',authMdw, require('./routes/role.route'));
 app.use('/api/guest-course', require('./routes/anonymous/course.route'));
-app.use('/api/documents', require('./routes/document.route'));
-app.use('/api/comments', require('./routes/rating.route'));
-app.use('/api/chatbot', require('./routes/chatbot.route'));
+app.use('/api/documents',authMdw, require('./routes/document.route'));
+app.use('/api/comments',authMdw, require('./routes/rating.route'));
+app.use('/api/chatbot',authMdw, require('./routes/chatbot.route'));
 
 app.get('/err', function (req, res) {
   throw new Error('Error!');
