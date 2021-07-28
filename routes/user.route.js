@@ -105,7 +105,6 @@ router.get('/:id/watch-list', async function (req, res) {
     let watchList;
     // try {
     watchList = await userModel.watchList(idUser)
-    console.log(watchList);
     // } catch {
     //     res.status('400').json('Can not get all course ')
     // }
@@ -137,6 +136,17 @@ router.post('/:id/like-course', async function (req, res) {
         res.status(400).json("Can't like this course")
     }
     res.status(200).json("Like success");
+})
+// bỏ thích 1 khoá học
+router.delete('/:id/dislike-course', async function (req, res) {
+    const idUser = req.params.id;
+    const idCourse = req.body.course_id;
+    try {
+        const likeCourse = await userModel.unLikeCourse(idUser, idCourse);
+    } catch {
+        res.status(400).json("Can't like this course")
+    }
+    res.status(200).json("DisLike success");
 })
 
 // Lấy danh sách khóa học đã đăng ký truyền vào params idUser
@@ -197,19 +207,21 @@ router.post('/:id/rating-course', async function (req, res) {
 })
 
 //get user isLike course
-router.get('/:id/is-like', async function (req, res) {
+router.get('/:id/is-like/:course_id', async function (req, res) {
     const idUser = req.params.id;
-    const idCourse = req.body.course_id;
+    const idCourse = req.params.course_id;
     let isLike;
     try {
         isLike = await userModel.isLike(idUser, idCourse)
-        console.log(isLike)
+        console.log('like', isLike.length);
+        if(isLike.length > 0){
+            return res.json(true);
+        }else{
+            return res.json(false);
+        }
     } catch {
-        res.status(400).json('Can not get status like')
+        res.json(false);
     }
-    if (isLike.length > 1) {
-        res.json(true);
-    } else res.json(false);
 })
 
 router.post('/add-new-user', multerUpload.single('avatar'), async (req, res) => {
