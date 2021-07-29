@@ -64,6 +64,16 @@ module.exports = {
         }
         return teachers;
     },
+    // Get all email of user
+    async getEmailAll(){
+        const emails = await db.knex.select('email')
+                                    .from('user')
+                                    .where('is_delete', 0)
+        if (emails.length === 0) {
+            return null;
+        }
+        return emails;
+    },
     //Get teacher by id
     async getTeacherById(id) {
         const teacher = await db.knex('user').where({ 'id': id, 'role_id': 2, 'is_delete': false });
@@ -78,7 +88,7 @@ module.exports = {
     },
     //Check value of refeshtoken
     async isValidRFToken(id, rfToken) {
-        const list = await db.knex('users').where('id', id).andWhere('rfToken', rfToken);
+        const list = await db.knex('user').where('id', id).andWhere('rfToken', rfToken);
         if (list.length > 0) {
             return true;
         }

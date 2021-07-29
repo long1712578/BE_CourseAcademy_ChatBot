@@ -43,6 +43,7 @@ router.post('/', async (req,res) => {
 router.post('/refesh', async(req,res) => {
     const accessToken = req.body.accessToken;
     const refreshToken = req.body.refreshToken;
+    console.log("refest", accessToken);
     const payLoad = jwt.verify(accessToken, authConfig.secret, {ignoreExpiration: true});
     const userId = payLoad.userId;
     const ret = await userModel.isValidRFToken(userId, refreshToken);
