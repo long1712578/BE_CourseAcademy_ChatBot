@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const path = require('path');
 require('express-async-errors');
 const cors = require('cors');
 const passport = require('passport');
@@ -14,6 +15,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
 // Passport session setup. 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -59,7 +61,7 @@ app.use('/api/videos',authMdw, require('./routes/video.route'));
 app.use('/api/orders',authMdw, require('./routes/course_order.route'));
 app.use('/api/roles',authMdw, require('./routes/role.route'));
 app.use('/api/guest-course', require('./routes/anonymous/course.route'));
-app.use('/api/documents',authMdw, require('./routes/document.route'));
+app.use('/api/documents', require('./routes/document.route'));//,authMdw
 app.use('/api/comments',authMdw, require('./routes/rating.route'));
 app.use('/api/chatbot',authMdw, require('./routes/chatbot.route'));
 

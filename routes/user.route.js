@@ -1,5 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'pdlong578@gmail.com',
+    pass: 'long1712578'
+  }
+});
 
 const userModel = require('../Models/user.model');
 const { multerUpload, isValidFileImage } = require('../utils/upload');
@@ -19,6 +27,33 @@ router.get('/', async (req, res) => {
 //signup
 router.post('/', async (req, res) => {
     const user = req.body;
+    //check email
+    if(user.email){
+        const isCheck = false;
+        const listEmail = await userModel.getEmailAll();
+        for(let e of listEmail){
+            if(e.email === user.email){
+                isCheck = true;
+            }
+        }
+        if(isCheck){
+            res.status(400).json({message: "The email had exist!"});
+        }
+        var mailOptions = {
+            from: 'pdlong578@gmail.com',
+            to: req.body.email,
+            subject: 'Register success!',
+            text: 'You had register account of my course academy!'
+          };
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.log(error);
+              res.status(400).json({message: "The email send not success!"})
+            }else{
+                console.log("thanh cong");
+            }
+          });
+    }
     user.is_delete = 0;
     user.password = bcrypt.hashSync(user.password, 10);
     const ids = await userModel.add(user);
