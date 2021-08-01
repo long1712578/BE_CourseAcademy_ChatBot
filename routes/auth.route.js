@@ -46,6 +46,16 @@ router.post('/refesh', async(req,res) => {
     console.log("refest", accessToken);
     const payLoad = jwt.verify(accessToken, authConfig.secret, {ignoreExpiration: true});
     const userId = payLoad.userId;
+    const newPayLoad = {
+        userId: payLoad.userId,
+        fullName: payLoad.fullName,
+        userName: payLoad.userName,
+        address: payLoad.address,
+        phone: payLoad.phone,
+        birthDate: payLoad.birthDate,
+        email: payLoad.email,
+    };
+
     const ret = await userModel.isValidRFToken(userId, refreshToken);
     if(ret === true){
         const newAccessToken = jwt.sign({userId}, authConfig.secret, { expiresIn: 60 * 10 } );
