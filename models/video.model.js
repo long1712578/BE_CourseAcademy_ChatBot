@@ -8,6 +8,9 @@ module.exports = {
     async add(data) {
         return await db.knex('video').insert(data);
     },
+    async preview(course_id) {
+        return await db.knex('video').where({course_id});
+    },
     async single(id) {
         const course = await db.knex('video').where({ id: id });
         if (course.length === 0) {

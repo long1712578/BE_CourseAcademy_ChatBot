@@ -1,10 +1,11 @@
 const express = require('express');
+const authMdw = require('../middlewares/auth.mdw');
 const documentModel = require('../models/document.model');
 const uploadFileToFirebase = require('../utils/firebase');
 const { isValidFileDocument, multerUpload } = require('../utils/upload');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authMdw, async (req, res) => {
     const filter = req.query;
     const result = await documentModel.all(filter);
     if (result.totalPage === 0) {
@@ -13,7 +14,17 @@ router.get('/', async (req, res) => {
     return res.json(result);
 });
 
-router.post('/', multerUpload.single('url'), async (req, res) => {
+// id is courseId
+router.get('/preview/:id', async(req,res) => {
+    const courseId = req.params.id;
+    const documents = await documentModel.preview(courseId);
+    if(documents.length === 0){
+        return res.status(400).json("Not document");
+    }
+    return res.json(documents[0]);
+});
+
+router.post('/', authMdw, multerUpload.single('url'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
         if (req.file) {
@@ -32,7 +43,7 @@ router.post('/', multerUpload.single('url'), async (req, res) => {
     }
 });
 
-router.put('/:id', multerUpload.single('url'), async (req, res) => {
+router.put('/:id', authMdw, multerUpload.single('url'), async (req, res) => {
     try {
         const id = req.params.id * 1 || 0;
         const data = { ...req.body, is_delete: false };
@@ -53,7 +64,7 @@ router.put('/:id', multerUpload.single('url'), async (req, res) => {
 
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', authMdw, async (req, res) => {
     const id = parseInt(req.params.id);
     const doc = await documentModel.single(id);
     if (doc === null) {
@@ -63,7 +74,7 @@ router.get('/:id', async (req, res) => {
 });
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMdw, async (req, res) => {
     const id = parseInt(req.params.id);
     const document = await documentModel.single(id);
     if (document === null) {

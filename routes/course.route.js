@@ -1,4 +1,5 @@
 const express = require('express');
+const authMdw = require('../middlewares/auth.mdw');
 
 const courseModel = require('../Models/course.model');
 const fs = require("fs");
@@ -21,7 +22,7 @@ router.get('/', async (req, res) => {
     return res.json(result);
 });
 
-router.post('/', multerUpload.single('image'), async (req, res) => {
+router.post('/', authMdw, multerUpload.single('image'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
         if (req.file) {
@@ -49,7 +50,7 @@ router.get('/:id', async (req, res) => {
     return res.json(course);
 });
 
-router.put('/:id', multerUpload.single('image'), async (req, res) => {
+router.put('/:id', authMdw, multerUpload.single('image'), async (req, res) => {
     try {
         const id = parseInt(req.params.id);
         const data = { ...req.body, is_delete: false };
@@ -69,7 +70,7 @@ router.put('/:id', multerUpload.single('image'), async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMdw, async (req, res) => {
     const id = parseInt(req.params.id);
     const course = await courseModel.single(id);
     if (course === null) {
@@ -79,12 +80,12 @@ router.delete('/:id', async (req, res) => {
     return res.json();
 });
 
-router.post('/:id', async (req, res) => {
+router.post('/:id', authMdw, async (req, res) => {
     console.log("route add course");
     return res.status(200);
 });
 
-router.post('/:id/upload-video', async (req, res) => {
+router.post('/:id/upload-video', authMdw, async (req, res) => {
     const form = formidable({ multiples: true, keepExtensions: true });
     const courseId = req.params.id;
 
@@ -130,7 +131,7 @@ router.post('/:id/upload-video', async (req, res) => {
 
 });
 
-router.post('/:id/upload-document', async (req, res) => {
+router.post('/:id/upload-document', authMdw, async (req, res) => {
     const form = formidable({ multiples: true, keepExtensions: true });
     const courseId = req.params.id;
 

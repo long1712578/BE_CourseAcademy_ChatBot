@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 const categoryModel = require('../models/category.model');
 const courseModel = require('../models/course.model');
+const authMdw = require('../middlewares/auth.mdw');
 
 const router = express.Router();
 
@@ -25,7 +26,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // add category
-router.post('/', async (req, res) => {
+router.post('/', authMdw, async (req, res) => {
     const name = req.body.name;
     const last_update = new Date();
     var category = {
@@ -36,7 +37,7 @@ router.post('/', async (req, res) => {
     res.status(201).json(newCategory.id);
 });
 // delete category
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMdw, async (req, res) => {
     const id = parseInt(req.params.id);
     const category = await categoryModel.single(id);
     console.log(category);
@@ -51,7 +52,7 @@ router.delete('/:id', async (req, res) => {
     return res.json();
 });
 // update category
-router.put('/:id', async (req, res) => {
+router.put('/:id', authMdw, async (req, res) => {
     const id = parseInt(req.params.id);
     const name = req.body.name;
     const result = await categoryModel.update(id, name);
