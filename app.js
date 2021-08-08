@@ -47,6 +47,7 @@ app.use(passport.session());
 // anonymous
 app.use('/api/sign-up', require('./routes/user.route'));
 app.use('/api/sign-in', require('./routes/auth.route'));
+app.use('/api/admin-sign-in', require('./routes/auth.route'));
 
 // admin
 app.use('/api/admin', require('./routes/user.admin.route'));
