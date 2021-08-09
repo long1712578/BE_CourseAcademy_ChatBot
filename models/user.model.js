@@ -41,7 +41,8 @@ module.exports = {
     },
     //Get user by username
     async singleByUserName(username) {
-        const users = await db.knex('user').where('username', username);
+        // const users = await db.knex('user').where('username', username);
+        const users = await db.knex('user').where({username, is_delete: false, active: true});
         if (users.length === 0) {
             return null;
         }
@@ -115,7 +116,7 @@ module.exports = {
     },
 
     async updateOpt(email){
-        return db.knex('user').where('email', email).update({is_delete: false});
+        return db.knex('user').where('email', email).update({active: true});
     },
     getInforUser(userId) {
         return db.knex.select('fullname', 'username', 'address', 'email', 'phone', 'gender', 'date_of_birth', 'avatar', 'role_id')

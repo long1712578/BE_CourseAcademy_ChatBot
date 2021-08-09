@@ -22,7 +22,7 @@ router.get('/:id', async (req, res) => {
     return res.json(order);
 });
 router.post('/', async (req,res) => {
-    // console.log("id user post", req.accessTokenPayload.userId);
+    console.log("id user post", req.accessTokenPayload.userId);
     const order = {
         course_id: req.body.courseId,
         user_id: req.accessTokenPayload.userId,

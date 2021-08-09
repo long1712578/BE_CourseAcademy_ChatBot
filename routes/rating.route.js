@@ -1,4 +1,5 @@
 const express = require('express');
+const authMdw = require('../middlewares/auth.mdw');
 const rateModel = require('../models/rating.model');
 
 const router = express.Router();
@@ -23,9 +24,9 @@ router.get('/course/:id', async (req, res) => {
 // });
 
 // add category
-router.post('/', async (req, res) => {
+router.post('/', authMdw, async (req, res) => {
     const comment = req.body.comment;
-    const useId = req.body.userId;
+    const useId = req.accessTokenPayload.userId;
     const courseId = req.body.courseId;
     const rating = req.body.rating || null;
     const last_update = new Date();

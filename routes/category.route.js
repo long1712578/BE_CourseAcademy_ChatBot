@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
         return res.status(204).json();
     }
     return res.json(result);
-})
+});
 
 router.get('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
@@ -23,6 +23,17 @@ router.get('/:id', async (req, res) => {
         return res.status(204);
     }
     return res.json(category);
+});
+router.get('/field_id/:id', async (req, res) => {
+    try{
+        const id = parseInt(req.params.id);
+        console.log('id', id);
+        const categorys = await categoryModel.getCategoryByFieldId(id);
+        console.log('cat', categorys);
+        res.json(categorys);
+    }catch(err){
+        res.status(400).json({message: 'Get category by field_id error :('})
+    }
 });
 
 // add category

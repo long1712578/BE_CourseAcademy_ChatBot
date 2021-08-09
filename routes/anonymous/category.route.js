@@ -6,6 +6,6 @@ const router=express.Router();
 router.get('/',async function (req,res){
     const listCategory=await modelCategory.all();
     res.json(listCategory);
-})
+});
 
 module.exports=router;

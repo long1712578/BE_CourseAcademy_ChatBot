@@ -62,7 +62,7 @@ app.use('/api/orders',authMdw, require('./routes/course_order.route'));
 app.use('/api/roles',authMdw, require('./routes/role.route'));
 app.use('/api/guest-course', require('./routes/anonymous/course.route'));
 app.use('/api/documents', require('./routes/document.route'));//,authMdw
-app.use('/api/comments',authMdw, require('./routes/rating.route'));
+app.use('/api/comments', require('./routes/rating.route'));
 app.use('/api/chatbot',authMdw, require('./routes/chatbot.route'));
 
 app.get('/err', function (req, res) {

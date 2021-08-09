@@ -24,11 +24,23 @@ router.get('/', async (req, res) => {
         return res.status(204).json();
     }
     return res.json(result);
+});
+
+router.get('/check-username', async(req, res) =>{
+    const name = req.query.username;
+    const user = await userModel.singleByUserName(name);
+    if(!user){
+        res.json(name);
+    }else{
+        res.status(400).json({message: "username had exist"});
+    }
 })
 
 //signup
 router.post('/', async (req, res) => {
-    const user = req.body;
+    const user1 = req.body;
+    const user = {... user1, role_id : 1};
+    console.log('user', user);
     //check email
     if(user.email){
         const isCheck = false;
@@ -44,8 +56,8 @@ router.post('/', async (req, res) => {
         var optcode = jwt.sign({emailO: user.email}, optSecret.secret, {
             expiresIn: 30 *60 // seconds(30 phut)
         });
-        console.log('abc', optcode);
-        user.is_delete = 1;
+        user.is_delete = 0;
+        user.active = 0; // Cho xac thuc 
         user.password = bcrypt.hashSync(user.password, 10);
         const ids = await userModel.add(user);
         user.id = ids[0];
@@ -190,10 +202,9 @@ router.delete('/:id/watch-list', async function (req, res) {
 })
 
 // thích một khóa học, gọi api truyền xuống body user_id và course_id
-router.post('/:id/like-course', async function (req, res) {
-    const idUser = req.params.id;
+router.post('/like-course', async function (req, res) {
+    const idUser = req.accessTokenPayload.userId;
     const idCourse = req.body.course_id;
-    console.log("id user post", req.accessTokenPayload.userId);
     try {
         const likeCourse = await userModel.likeCourse(idUser, idCourse);
     } catch {
@@ -202,9 +213,9 @@ router.post('/:id/like-course', async function (req, res) {
     res.status(200).json("Like success");
 })
 // bỏ thích 1 khoá học
-router.delete('/:id/dislike-course', async function (req, res) {
-    const idUser = req.params.id;
-    const idCourse = req.body.course_id;
+router.delete('/dislike-course/:id', async function (req, res) {
+    const idUser = req.accessTokenPayload.userId;
+    const idCourse = req.params.id;
     try {
         const likeCourse = await userModel.unLikeCourse(idUser, idCourse);
     } catch {
@@ -271,13 +282,13 @@ router.post('/:id/rating-course', async function (req, res) {
 })
 
 //get user isLike course
-router.get('/:id/is-like/:course_id', async function (req, res) {
-    const idUser = req.params.id;
+router.get('/is-like/:course_id', async function (req, res) {
+
+    const idUser = req.accessTokenPayload.userId;
     const idCourse = req.params.course_id;
     let isLike;
     try {
         isLike = await userModel.isLike(idUser, idCourse)
-        console.log('like', isLike.length);
         if(isLike.length > 0){
             return res.json(true);
         }else{

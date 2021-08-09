@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/', async (req,res) => {
     const user = await userModel.singleByUserName(req.body.username);
     if(user === null) {
-        res.status(400).json("Use not exist");
+        res.status(400).json("Use not exist or not active");
     }
     if(!bcrypt.compareSync(req.body.password, user.password)){
         res.status(400).json("Password fail");
