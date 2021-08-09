@@ -32,8 +32,8 @@ module.exports = {
             courseOrders,
         };
     },
-    async single(id) {
-        const course = await db.knex('course_order').where({ id: id });
+    async single(id, userId) {
+        const course = await db.knex('course_order').where({ course_id: id, user_id: userId });
         if (course.length === 0) {
             return null;
         }

@@ -7,6 +7,9 @@ module.exports = {
        // const { limit = 999 } = filter;
         return await db.knex('category');
     },
+    async getCategoryByFieldId (id){
+        return await db.knex('category').where('field_id', id);
+    },
     async add(category) {
         return await db.knex(tbCategory).insert(category);
     },

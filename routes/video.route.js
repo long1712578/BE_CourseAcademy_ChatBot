@@ -1,19 +1,30 @@
 const express = require('express');
+const authMdw = require('../middlewares/auth.mdw');
 const { multerUpload, isValidFileVideo } = require('../utils/upload');
 const videoModel = require('./../models/video.model');
 const uploadFileToFirebase = require('../utils/firebase')
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authMdw, async (req, res) => {
     const result = await videoModel.all();
     if (result.totalPage === 0) {
         return res.status(204).json();
     }
     return res.json(result);
-})
+});
 
-router.get('/:id', async (req, res) => {
+// id is courseId
+router.get('/preview/:id', async(req,res) => {
+    const courseId = req.params.id;
+    const videos = await videoModel.preview(courseId);
+    if(videos.length === 0){
+        return res.status(400).json("Not video");
+    }
+    return res.json(videos[0]);
+});
+
+router.get('/:id', authMdw, async (req, res) => {
     const id = parseInt(req.params.id);
     const video = await videoModel.single(id);
     if (video === null) {
@@ -22,7 +33,7 @@ router.get('/:id', async (req, res) => {
     return res.json(video);
 });
 
-router.post('/', multerUpload.single('url'), async (req, res) => {
+router.post('/', authMdw, multerUpload.single('url'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
         if (req.file) {
@@ -41,7 +52,7 @@ router.post('/', multerUpload.single('url'), async (req, res) => {
     }
 });
 
-router.put('/:id', multerUpload.single('url'), async (req, res) => {
+router.put('/:id', authMdw, multerUpload.single('url'), async (req, res) => {
     try {
         const id = req.params.id * 1 || 0;
         const data = { ...req.body, is_delete: false };
@@ -62,7 +73,7 @@ router.put('/:id', multerUpload.single('url'), async (req, res) => {
 
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMdw, async (req, res) => {
     const id = parseInt(req.params.id);
     const document = await videoModel.single(id);
     if (document === null) {

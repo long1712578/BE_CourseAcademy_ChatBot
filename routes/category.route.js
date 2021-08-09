@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 const categoryModel = require('../models/category.model');
 const courseModel = require('../models/course.model');
+const authMdw = require('../middlewares/auth.mdw');
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
         return res.status(204).json();
     }
     return res.json(result);
-})
+});
 
 router.get('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
@@ -23,9 +24,20 @@ router.get('/:id', async (req, res) => {
     }
     return res.json(category);
 });
+router.get('/field_id/:id', async (req, res) => {
+    try{
+        const id = parseInt(req.params.id);
+        console.log('id', id);
+        const categorys = await categoryModel.getCategoryByFieldId(id);
+        console.log('cat', categorys);
+        res.json(categorys);
+    }catch(err){
+        res.status(400).json({message: 'Get category by field_id error :('})
+    }
+});
 
 // add category
-router.post('/', async (req, res) => {
+router.post('/', authMdw, async (req, res) => {
     const name = req.body.name;
     const last_update = new Date();
     var category = {
@@ -36,7 +48,7 @@ router.post('/', async (req, res) => {
     res.status(201).json(newCategory.id);
 });
 // delete category
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMdw, async (req, res) => {
     const id = parseInt(req.params.id);
     const category = await categoryModel.single(id);
     console.log(category);
@@ -51,7 +63,7 @@ router.delete('/:id', async (req, res) => {
     return res.json();
 });
 // update category
-router.put('/:id', async (req, res) => {
+router.put('/:id', authMdw, async (req, res) => {
     const id = parseInt(req.params.id);
     const name = req.body.name;
     const result = await categoryModel.update(id, name);

@@ -41,7 +41,8 @@ module.exports = {
     },
     //Get user by username
     async singleByUserName(username) {
-        const users = await db.knex('user').where('username', username);
+        // const users = await db.knex('user').where('username', username);
+        const users = await db.knex('user').where({username, is_delete: false, active: true});
         if (users.length === 0) {
             return null;
         }
@@ -74,6 +75,15 @@ module.exports = {
         }
         return emails;
     },
+    async getEmaiById(id){
+        const emails = await db.knex.select('email')
+                                    .from('user')
+                                    .where('id', id)
+        if (emails.length === 0) {
+            return null;
+        }
+        return emails[0];
+    },
     //Get teacher by id
     async getTeacherById(id) {
         const teacher = await db.knex('user').where({ 'id': id, 'role_id': 2, 'is_delete': false });
@@ -105,7 +115,9 @@ module.exports = {
         return db.knex('user').where('id', id).update(data);
     },
 
-
+    async updateOpt(email){
+        return db.knex('user').where('email', email).update({active: true});
+    },
     getInforUser(userId) {
         return db.knex.select('fullname', 'username', 'address', 'email', 'phone', 'gender', 'date_of_birth', 'avatar', 'role_id')
             .from('user')

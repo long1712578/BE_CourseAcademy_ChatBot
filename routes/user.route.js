@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+var rn = require('random-number');
 var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -8,7 +9,8 @@ var transporter = nodemailer.createTransport({
     pass: 'long1712578'
   }
 });
-
+const jwt = require('jsonwebtoken');
+const optSecret = require('../config/auth.config');
 const userModel = require('../Models/user.model');
 const { multerUpload, isValidFileImage } = require('../utils/upload');
 const uploadFileToFirebase = require('../utils/firebase');
@@ -22,11 +24,23 @@ router.get('/', async (req, res) => {
         return res.status(204).json();
     }
     return res.json(result);
+});
+
+router.get('/check-username', async(req, res) =>{
+    const name = req.query.username;
+    const user = await userModel.singleByUserName(name);
+    if(!user){
+        res.json(name);
+    }else{
+        res.status(400).json({message: "username had exist"});
+    }
 })
 
 //signup
 router.post('/', async (req, res) => {
-    const user = req.body;
+    const user1 = req.body;
+    const user = {... user1, role_id : 1};
+    console.log('user', user);
     //check email
     if(user.email){
         const isCheck = false;
@@ -39,11 +53,24 @@ router.post('/', async (req, res) => {
         if(isCheck){
             res.status(400).json({message: "The email had exist!"});
         }
+        var optcode = jwt.sign({emailO: user.email}, optSecret.secret, {
+            expiresIn: 30 *60 // seconds(30 phut)
+        });
+        user.is_delete = 0;
+        user.active = 0; // Cho xac thuc 
+        user.password = bcrypt.hashSync(user.password, 10);
+        const ids = await userModel.add(user);
+        user.id = ids[0];
+        delete user.password;
         var mailOptions = {
             from: 'pdlong578@gmail.com',
             to: req.body.email,
-            subject: 'Register success!',
-            text: 'You had register account of my course academy!'
+            subject: 'Please confirm your account!',
+            html: `<h1>Email Confirmation</h1>
+        <h2>Hello ${user.fullname || "user"}</h2>
+        <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
+        <a href=http://localhost:5000/api/sign-up/confirm/${optcode}/user/${ids[0]}> Click here</a>
+        </div>`,
           };
           transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
@@ -54,14 +81,27 @@ router.post('/', async (req, res) => {
             }
           });
     }
-    user.is_delete = 0;
-    user.password = bcrypt.hashSync(user.password, 10);
-    const ids = await userModel.add(user);
-    user.id = ids[0];
-    delete user.password;
 
     res.status(201).json(user);
 });
+router.get('/confirm/:opt/user/:id', async(req, res) => {
+    const opt = req.params.opt || null;
+    const id =  req.params.id;
+    try{
+        const decode = jwt.verify(opt, optSecret.secret);
+        const emailOtp = decode.emailO;
+        const email = await userModel.getEmaiById(id);
+        if(email.email !== emailOtp){
+            res.status(400).json({message: "opt is not correct!"});
+        }else{
+            await userModel.updateOpt(emailOtp);
+            res.json();
+        }
+    }catch (err){
+        res.status(400).json({message: err});
+    }
+
+})
 
 router.put('/:id', multerUpload.single('avatar'), async (req, res) => {
     const id = req.params.id * 1 || 0;
@@ -162,8 +202,8 @@ router.delete('/:id/watch-list', async function (req, res) {
 })
 
 // thích một khóa học, gọi api truyền xuống body user_id và course_id
-router.post('/:id/like-course', async function (req, res) {
-    const idUser = req.params.id;
+router.post('/like-course', async function (req, res) {
+    const idUser = req.accessTokenPayload.userId;
     const idCourse = req.body.course_id;
     try {
         const likeCourse = await userModel.likeCourse(idUser, idCourse);
@@ -173,9 +213,9 @@ router.post('/:id/like-course', async function (req, res) {
     res.status(200).json("Like success");
 })
 // bỏ thích 1 khoá học
-router.delete('/:id/dislike-course', async function (req, res) {
-    const idUser = req.params.id;
-    const idCourse = req.body.course_id;
+router.delete('/dislike-course/:id', async function (req, res) {
+    const idUser = req.accessTokenPayload.userId;
+    const idCourse = req.params.id;
     try {
         const likeCourse = await userModel.unLikeCourse(idUser, idCourse);
     } catch {
@@ -242,13 +282,13 @@ router.post('/:id/rating-course', async function (req, res) {
 })
 
 //get user isLike course
-router.get('/:id/is-like/:course_id', async function (req, res) {
-    const idUser = req.params.id;
+router.get('/is-like/:course_id', async function (req, res) {
+
+    const idUser = req.accessTokenPayload.userId;
     const idCourse = req.params.course_id;
     let isLike;
     try {
         isLike = await userModel.isLike(idUser, idCourse)
-        console.log('like', isLike.length);
         if(isLike.length > 0){
             return res.json(true);
         }else{

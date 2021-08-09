@@ -10,8 +10,8 @@ const router = express.Router();
 //Login
 router.post('/', async (req, res) => {
     const user = await userModel.singleByUserName(req.body.username);
-    if (user === null) {
-        return res.status(400).json("Use not exist");
+    if(user === null) {
+        res.status(400).json("Use not exist or not active");
     }
     if (!bcrypt.compareSync(req.body.password, user.password)) {
         return res.status(400).json("Password fail");
@@ -45,6 +45,16 @@ router.post('/refesh', async (req, res) => {
     const refreshToken = req.body.refreshToken;
     const payLoad = jwt.verify(accessToken, authConfig.secret, { ignoreExpiration: true });
     const userId = payLoad.userId;
+    const newPayLoad = {
+        userId: payLoad.userId,
+        fullName: payLoad.fullName,
+        userName: payLoad.userName,
+        address: payLoad.address,
+        phone: payLoad.phone,
+        birthDate: payLoad.birthDate,
+        email: payLoad.email,
+    };
+
     const ret = await userModel.isValidRFToken(userId, refreshToken);
     if (ret === true) {
         const newAccessToken = jwt.sign({ userId }, authConfig.secret, { expiresIn: 60 * 10 });
