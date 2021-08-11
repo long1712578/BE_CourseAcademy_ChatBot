@@ -55,7 +55,7 @@ router.post('/refesh', async (req, res) => {
         email: payLoad.email,
     };
 
-    const ret = await userModel.isValidRFToken(userId, refreshToken);
+    const ret = await userModel.isValidRFToken(newPayLoad, refreshToken);
     if (ret === true) {
         const newAccessToken = jwt.sign({ userId }, authConfig.secret, { expiresIn: 60 * 10 });
         return res.json({
