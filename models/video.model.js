@@ -1,9 +1,19 @@
 const db = require('../utils/db');
 
 module.exports = {
-    async all() {
-        return await db.knex('video').leftJoin("course", "video.course_id", "course.id").select('*')
-            .options({ nestTables: true });;
+    async all(filter) {
+        const {
+            page = 1,
+            limit = 6,
+            sort_by = "id",
+            sort_type = "asc",
+            search = "",
+            ...otherParams
+        } = filter;
+        return await db.knex('video')
+            .leftJoin("course", "video.course_id", "course.id")
+            .where({ ...otherParams }).select('*')
+            .options({ nestTables: true });
     },
     async add(data) {
         return await db.knex('video').insert(data);

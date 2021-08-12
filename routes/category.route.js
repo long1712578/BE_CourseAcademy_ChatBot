@@ -27,10 +27,8 @@ router.get('/:id', async (req, res) => {
 router.get('/field_id/:id', async (req, res) => {
     try{
         const id = parseInt(req.params.id);
-        console.log('id', id);
-        const categorys = await categoryModel.getCategoryByFieldId(id);
-        console.log('cat', categorys);
-        res.json(categorys);
+        const categories = await categoryModel.getCategoryByFieldId(id);
+        res.status(200).json(categories);
     }catch(err){
         res.status(400).json({message: 'Get category by field_id error :('})
     }

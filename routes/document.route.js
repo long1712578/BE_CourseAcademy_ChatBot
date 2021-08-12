@@ -37,7 +37,7 @@ router.post('/', authMdw, multerUpload.single('url'), async (req, res) => {
         const ids = await documentModel.add(data);
         data.id = ids[0];
         const doc = await documentModel.single(data.id);
-        res.status(201).json(doc);
+        res.status(200).json(doc);
     } catch (err) {
         res.status(400).json(err);
     }

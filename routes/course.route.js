@@ -121,7 +121,7 @@ router.post('/:id/upload-video', authMdw, async (req, res) => {
         if (data) {
             const videos = await videoModel.add(data);
             if (videos)
-                res.status(201).json({ message: "Add video successfully", video: videos });
+                res.status(200).json({ message: "Add video successfully", video: videos });
             else
                 throw new Error({ message: "Add video failed" });
         }
@@ -172,7 +172,7 @@ router.post('/:id/upload-document', authMdw, async (req, res) => {
         if (data) {
             const documents = await documentModel.add(data);
             if (documents)
-                res.status(201).json({ message: "Add document successfully", documents: documents });
+                res.status(200).json({ message: "Add document successfully", documents: documents });
             else
                 throw new Error({ message: "Add document failed" });
         }
