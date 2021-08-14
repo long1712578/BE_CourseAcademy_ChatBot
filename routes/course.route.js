@@ -16,15 +16,13 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     const filter = req.query;
     const result = await courseModel.all(filter);
-    if (result.totalPage === 0) {
-        return res.status(204).json();
-    }
     return res.json(result);
 });
 
 router.post('/', authMdw, multerUpload.single('image'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
+        console.log(data);
         if (req.file) {
             if (!isValidFileImage(req.file.originalname, req.file.mimetype)) {
                 return res.status(400).json({ 'message': "Please upload file image type was accepted include png, jpg, jpeg!!" })
