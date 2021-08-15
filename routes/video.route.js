@@ -7,7 +7,8 @@ const uploadFileToFirebase = require('../utils/firebase')
 const router = express.Router();
 
 router.get('/', authMdw, async (req, res) => {
-    const result = await videoModel.all();
+    const filter = req.query;
+    const result = await videoModel.all(filter);
     if (result.totalPage === 0) {
         return res.status(204).json();
     }
@@ -75,7 +76,7 @@ router.put('/:id', authMdw, multerUpload.single('url'), async (req, res) => {
         }
         const result = await videoModel.update(id, data);
         if (result == null) res.status(400).json({ message: "Video is exist" });
-        if (result > 0) res.status(201).json({ message: result + " row change" });
+        if (result > 0) res.status(200).json({ message: result + " row change" });
         else res.status(202).json({ message: "No change" });
     } catch (err) {
         res.status(400).json(err);

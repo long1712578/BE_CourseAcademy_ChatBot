@@ -16,15 +16,13 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     const filter = req.query;
     const result = await courseModel.all(filter);
-    if (result.totalPage === 0) {
-        return res.status(204).json();
-    }
     return res.json(result);
 });
 
 router.post('/', authMdw, multerUpload.single('image'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
+        console.log(data);
         if (req.file) {
             if (!isValidFileImage(req.file.originalname, req.file.mimetype)) {
                 return res.status(400).json({ 'message': "Please upload file image type was accepted include png, jpg, jpeg!!" })
@@ -121,7 +119,7 @@ router.post('/:id/upload-video', authMdw, async (req, res) => {
         if (data) {
             const videos = await videoModel.add(data);
             if (videos)
-                res.status(201).json({ message: "Add video successfully", video: videos });
+                res.status(200).json({ message: "Add video successfully", video: videos });
             else
                 throw new Error({ message: "Add video failed" });
         }
@@ -172,7 +170,7 @@ router.post('/:id/upload-document', authMdw, async (req, res) => {
         if (data) {
             const documents = await documentModel.add(data);
             if (documents)
-                res.status(201).json({ message: "Add document successfully", documents: documents });
+                res.status(200).json({ message: "Add document successfully", documents: documents });
             else
                 throw new Error({ message: "Add document failed" });
         }
