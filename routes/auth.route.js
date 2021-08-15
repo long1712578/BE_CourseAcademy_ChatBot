@@ -24,6 +24,7 @@ router.post('/', async (req, res) => {
         phone: user.phone,
         birthDate: user.date_of_birth,
         email: user.email,
+        role_id: user.role_id
     };
 
     const opts = {
@@ -36,7 +37,8 @@ router.post('/', async (req, res) => {
     return res.json({
         authenticated: true,
         accessToken,
-        refreshToken
+        refreshToken,
+        role: user.role_id
     });
 });
 
@@ -53,6 +55,7 @@ router.post('/refesh', async (req, res) => {
         phone: payLoad.phone,
         birthDate: payLoad.birthDate,
         email: payLoad.email,
+        role_id: user.role_id 
     };
 
     const ret = await userModel.isValidRFToken(newPayLoad, refreshToken);
@@ -67,36 +70,38 @@ router.post('/refesh', async (req, res) => {
     });
 })
 
-router.post('/', async (req, res) => {
-    const user = await userModel.singleByUserName(req.body.username);
-    if (user === null) {
-        return res.status(400).json("Use not exist");
-    }
-    if (!bcrypt.compareSync(req.body.password, user.password)) {
-        return res.status(400).json("Password fail");
-    }
-    const payLoad = {
-        userId: user.id,
-        fullName: user.fullname,
-        userName: user.username,
-        address: user.address,
-        phone: user.phone,
-        birthDate: user.date_of_birth,
-        email: user.email,
-    };
+// router.post('/', async (req, res) => {
+//     const user = await userModel.singleByUserName(req.body.username);
+//     if (user === null) {
+//         return res.status(400).json("Use not exist");
+//     }
+//     if (!bcrypt.compareSync(req.body.password, user.password)) {
+//         return res.status(400).json("Password fail");
+//     }
+//     const payLoad = {
+//         userId: user.id,
+//         fullName: user.fullname,
+//         userName: user.username,
+//         address: user.address,
+//         phone: user.phone,
+//         birthDate: user.date_of_birth,
+//         email: user.email,
+//         role_id: user.role_id
+//     };
 
-    const opts = {
-        expiresIn: 10 * 60 // seconds(10p)
-    }
-    const accessToken = jwt.sign(payLoad, authConfig.secret, opts);
-    const refreshToken = random.generate(50);
-    await userModel.patchRFToken(user.id, refreshToken);
+//     const opts = {
+//         expiresIn: 10 * 60 // seconds(10p)
+//     }
+//     const accessToken = jwt.sign(payLoad, authConfig.secret, opts);
+//     const refreshToken = random.generate(50);
+//     await userModel.patchRFToken(user.id, refreshToken);
 
-    return res.json({
-        authenticated: true,
-        accessToken,
-        refreshToken
-    });
-});
+//     return res.json({
+//         authenticated: true,
+//         accessToken,
+//         refreshToken,
+//         role: user.role_id
+//     });
+// });
 
 module.exports = router;
