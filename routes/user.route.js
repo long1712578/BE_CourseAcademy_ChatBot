@@ -3,11 +3,11 @@ const bcrypt = require('bcrypt');
 var rn = require('random-number');
 var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'pdlong578@gmail.com',
-    pass: 'long1712578'
-  }
+    service: 'gmail',
+    auth: {
+        user: 'pdlong578@gmail.com',
+        pass: 'long1712578'
+    }
 });
 const jwt = require('jsonwebtoken');
 const optSecret = require('../config/auth.config');
@@ -26,35 +26,35 @@ router.get('/', async (req, res) => {
     return res.json(result);
 });
 
-router.get('/check-username', async(req, res) =>{
+router.get('/check-username', async (req, res) => {
     const name = req.query.username;
     const user = await userModel.singleByUserName(name);
-    if(!user){
+    if (!user) {
         res.json(name);
-    }else{
-        res.status(400).json({message: "username had exist"});
+    } else {
+        res.status(400).json({ message: "username had exist" });
     }
 })
 
 //signup
 router.post('/', async (req, res) => {
     const user1 = req.body;
-    const user = {... user1, role_id : 1};
+    const user = { ...user1, role_id: 1 };
     console.log('user', user);
     //check email
-    if(user.email){
+    if (user.email) {
         const isCheck = false;
         const listEmail = await userModel.getEmailAll();
-        for(let e of listEmail){
-            if(e.email === user.email){
+        for (let e of listEmail) {
+            if (e.email === user.email) {
                 isCheck = true;
             }
         }
-        if(isCheck){
-            res.status(400).json({message: "The email had exist!"});
+        if (isCheck) {
+            res.status(400).json({ message: "The email had exist!" });
         }
-        var optcode = jwt.sign({emailO: user.email}, optSecret.secret, {
-            expiresIn: 30 *60 // seconds(30 phut)
+        var optcode = jwt.sign({ email: user.email }, optSecret.secret, {
+            expiresIn: 30 * 60 // seconds(30 phut)
         });
         user.is_delete = 0;
         user.active = 0; // Cho xac thuc 
@@ -71,34 +71,34 @@ router.post('/', async (req, res) => {
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
         <a href=http://localhost:5000/api/sign-up/confirm/${optcode}/user/${ids[0]}> Click here</a>
         </div>`,
-          };
-          transporter.sendMail(mailOptions, function (error, info) {
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-              console.log(error);
-              res.status(400).json({message: "The email send not success!"})
-            }else{
+                console.log(error);
+                res.status(400).json({ message: "The email send not success!" })
+            } else {
                 console.log("thanh cong");
             }
-          });
+        });
     }
 
     res.status(201).json(user);
 });
-router.get('/confirm/:opt/user/:id', async(req, res) => {
+router.get('/confirm/:opt/user/:id', async (req, res) => {
     const opt = req.params.opt || null;
-    const id =  req.params.id;
-    try{
+    const id = req.params.id;
+    try {
         const decode = jwt.verify(opt, optSecret.secret);
         const emailOtp = decode.emailO;
         const email = await userModel.getEmaiById(id);
-        if(email.email !== emailOtp){
-            res.status(400).json({message: "opt is not correct!"});
-        }else{
+        if (email.email !== emailOtp) {
+            res.status(400).json({ message: "opt is not correct!" });
+        } else {
             await userModel.updateOpt(emailOtp);
             res.json();
         }
-    }catch (err){
-        res.status(400).json({message: err});
+    } catch (err) {
+        res.status(400).json({ message: err });
     }
 
 })
@@ -289,9 +289,9 @@ router.get('/is-like/:course_id', async function (req, res) {
     let isLike;
     try {
         isLike = await userModel.isLike(idUser, idCourse)
-        if(isLike.length > 0){
+        if (isLike.length > 0) {
             return res.json(true);
-        }else{
+        } else {
             return res.json(false);
         }
     } catch {

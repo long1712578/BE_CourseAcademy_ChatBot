@@ -14,7 +14,7 @@ module.exports = {
         const model = db
             .knex("user")
             .leftJoin("role", "role.id", "user.role_id")
-            .where({ ...otherParams, is_delete: false });
+            .where({ ...otherParams });
 
         const totalUser = await model.clone().count();
         const users = await model
