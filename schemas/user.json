@@ -1,0 +1,92 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1629396469.json",
+  "title": "Root",
+  "type": "object",
+  "required": [
+    "email"
+  ],
+  "properties": {
+    "fullname": {
+      "$id": "#root/fullname",
+      "title": "Fullname",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "Pham Dinh Long"
+      ],
+      "pattern": "^.*$"
+    },
+    "username": {
+      "$id": "#root/username",
+      "title": "Username",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "longnguyen"
+      ],
+      "pattern": "^.*$"
+    },
+    "address": {
+      "$id": "#root/address",
+      "title": "Address",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "46 abcv2"
+      ],
+      "pattern": "^.*$"
+    },
+    "email": {
+      "$id": "#root/email",
+      "title": "Email",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "1712574@student.hcmus.edu.vn"
+      ],
+      "pattern": "^.*$"
+    },
+    "phone": {
+      "$id": "#root/phone",
+      "title": "Phone",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "123456"
+      ],
+      "pattern": "^.*$"
+    },
+    "gender": {
+      "$id": "#root/gender",
+      "title": "Gender",
+      "type": "integer",
+      "examples": [
+        0
+      ],
+      "default": 0
+    },
+    "date_of_birth": {
+      "$id": "#root/date_of_birth",
+      "title": "Date_of_birth",
+      "type": "null",
+      "default": null
+    },
+    "avatar": {
+      "$id": "#root/avatar",
+      "title": "Avatar",
+      "type": "null",
+      "default": null
+    },
+    "role_id": {
+      "$id": "#root/role_id",
+      "title": "Role_id",
+      "type": "integer",
+      "examples": [
+        1
+      ],
+      "default": 0
+    }
+  }
+}

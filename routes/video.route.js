@@ -3,7 +3,7 @@ const authMdw = require('../middlewares/auth.mdw');
 const { multerUpload, isValidFileVideo } = require('../utils/upload');
 const videoModel = require('./../models/video.model');
 const uploadFileToFirebase = require('../utils/firebase')
-
+const schemaVideo=require('../schemas/video.json');
 const router = express.Router();
 
 router.get('/', authMdw, async (req, res) => {
@@ -44,7 +44,7 @@ router.get('/:id', authMdw, async (req, res) => {
     return res.json(video);
 });
 
-router.post('/', authMdw, multerUpload.single('url'), async (req, res) => {
+router.post('/', authMdw,  require('../middlewares/validate.mdw')(schemaVideo),multerUpload.single('url'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
         if (req.file) {

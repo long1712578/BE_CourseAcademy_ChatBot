@@ -1,0 +1,51 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1629394817.json",
+  "title": "Root",
+  "type": "object",
+  "required": [
+    "name",
+    "field_id"
+  ],
+  "properties": {
+    "id": {
+      "$id": "#root/id",
+      "title": "Id",
+      "type": "integer",
+      "examples": [
+        1
+      ],
+      "default": 0
+    },
+    "name": {
+      "$id": "#root/name",
+      "title": "Name",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "category"
+      ],
+      "pattern": "^.*$"
+    },
+    "last_update": {
+      "$id": "#root/last_update",
+      "title": "Last_update",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "2021-07-12T15:57:39.000Z"
+      ],
+      "pattern": "^.*$"
+    },
+    "field_id": {
+      "$id": "#root/field_id",
+      "title": "Field_id",
+      "type": "integer",
+      "examples": [
+        1
+      ],
+      "default": 0
+    }
+  }
+}

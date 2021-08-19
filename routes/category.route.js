@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const categoryModel = require('../models/category.model');
 const courseModel = require('../models/course.model');
 const authMdw = require('../middlewares/auth.mdw');
-
+const schemaCategory = require('../schemas/category.json');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -35,7 +35,7 @@ router.get('/field_id/:id', async (req, res) => {
 });
 
 // add category
-router.post('/', authMdw, async (req, res) => {
+router.post('/', authMdw,require('../middlewares/validate.mdw')(schemaCategory), async (req, res) => {
     const name = req.body.name;
     const last_update = new Date();
     var category = {
@@ -61,7 +61,7 @@ router.delete('/:id', authMdw, async (req, res) => {
     return res.json();
 });
 // update category
-router.put('/:id', authMdw, async (req, res) => {
+router.put('/:id', authMdw, require('../middlewares/validate.mdw')(schemaCategory), async (req, res) => {
     const id = parseInt(req.params.id);
     const name = req.body.name;
     const result = await categoryModel.update(id, name);

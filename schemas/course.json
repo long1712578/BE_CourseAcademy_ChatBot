@@ -1,31 +1,145 @@
 {
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1629396893.json",
+  "title": "Root",
+  "type": "object",
   "required": [
     "name",
+    "category_id",
     "created_by",
     "course_status_id",
-    "price",
-    "course_field_id"
+    "price"
   ],
   "properties": {
+    "id": {
+      "$id": "#root/id",
+      "title": "Id",
+      "type": "integer",
+      "examples": [
+        67
+      ],
+      "default": 0
+    },
     "name": {
       "$id": "#root/name",
       "title": "Name",
       "type": "string",
       "default": "",
-      "examples": ["course_test"],
+      "examples": [
+        "test3"
+      ],
       "pattern": "^.*$"
     },
     "description": {
       "$id": "#root/description",
       "title": "Description",
       "type": "string",
-      "default": ""
+      "default": "",
+      "examples": [
+        "123"
+      ],
+      "pattern": "^.*$"
     },
     "rating_average": {
       "$id": "#root/rating_average",
       "title": "Rating_average",
       "type": "integer",
-      "examples": [0],
+      "examples": [
+        0
+      ],
+      "default": 0
+    },
+    "category_id": {
+      "$id": "#root/category_id",
+      "title": "Category_id",
+      "type": "integer",
+      "examples": [
+        4
+      ],
+      "default": 0
+    },
+    "created_by": {
+      "$id": "#root/created_by",
+      "title": "Created_by",
+      "type": "integer",
+      "examples": [
+        7
+      ],
+      "default": 0
+    },
+    "course_status_id": {
+      "$id": "#root/course_status_id",
+      "title": "Course_status_id",
+      "type": "integer",
+      "examples": [
+        1
+      ],
+      "default": 0
+    },
+    "last_update": {
+      "$id": "#root/last_update",
+      "title": "Last_update",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "2021-08-08T08:10:32.000Z"
+      ],
+      "pattern": "^.*$"
+    },
+    "price": {
+      "$id": "#root/price",
+      "title": "Price",
+      "type": "integer",
+      "examples": [
+        123
+      ],
+      "default": 0
+    },
+    "view": {
+      "$id": "#root/view",
+      "title": "View",
+      "type": "integer",
+      "examples": [
+        0
+      ],
+      "default": 0
+    },
+    "is_delete": {
+      "$id": "#root/is_delete",
+      "title": "Is_delete",
+      "type": "integer",
+      "examples": [
+        0
+      ],
+      "default": 0
+    },
+    "promotion_price": {
+      "$id": "#root/promotion_price",
+      "title": "Promotion_price",
+      "type": "integer",
+      "examples": [
+        123
+      ],
+      "default": 0
+    },
+    "summary": {
+      "$id": "#root/summary",
+      "title": "Summary",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "123"
+      ],
+      "pattern": "^.*$"
+    },
+    "course_field_id": {
+      "$id": "#root/course_field_id",
+      "title": "Course_field_id",
+      "type": "integer",
+      "examples": [
+        3
+      ],
       "default": 0
     },
     "image": {
@@ -34,66 +148,9 @@
       "type": "string",
       "default": "",
       "examples": [
-        "https://firebasestorage.googleapis.com/v0/b/becourseacademy.appspot.com/o/image%2Fimage-1627117894178.png?alt=media&token=9b660429-c1a4-4eed-9b7a-491655036c93"
+        "https://firebasestorage.googleapis.com/v0/b/becourseacademy.appspot.com/o/image%2Fimage-1628435431445.png?alt=media&token=3835f546-2df8-4105-98f5-5ac20ed1199f"
       ],
       "pattern": "^.*$"
-    },
-    "category_id": {
-      "$id": "#root/category_id",
-      "title": "Category_id",
-
-      "examples": [1],
-      "default": 1
-    },
-    "created_by": {
-      "$id": "#root/created_by",
-      "title": "Created_by",
-
-      "examples": [1],
-      "default": 1
-    },
-    "course_status_id": {
-      "$id": "#root/course_status_id",
-      "title": "Course_status_id",
-      "examples": [1],
-      "default": 0
-    },
-    "price": {
-      "$id": "#root/price",
-      "title": "Price",
-      "examples": [0],
-      "default": 0
-    },
-    "view": {
-      "$id": "#root/view",
-      "title": "View",
-      "examples": [0],
-      "default": 0
-    },
-    "is_delete": {
-      "$id": "#root/is_delete",
-      "title": "Is_delete",
-      "type": "boolean",
-      "examples": [false],
-      "default": true
-    },
-    "promotion_price": {
-      "$id": "#root/promotion_price",
-      "title": "Promotion_price",
-      "examples": [0],
-      "default": 0
-    },
-    "summary": {
-      "$id": "#root/summary",
-      "title": "Summary",
-      "type": "string",
-      "default": ""
-    },
-    "course_field_id": {
-      "$id": "#root/course_field_id",
-      "title": "Course_field_id",
-      "examples": [1],
-      "default": 0
     }
   }
 }

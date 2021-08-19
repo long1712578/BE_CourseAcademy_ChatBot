@@ -1,0 +1,61 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1629396175.json",
+  "title": "Root",
+  "type": "object",
+  "required": [
+    "course_id",
+    "is_delete",
+    "url"
+  ],
+  "properties": {
+    "id": {
+      "$id": "#root/id",
+      "title": "Id",
+      "type": "integer",
+      "examples": [
+        101
+      ],
+      "default": 0
+    },
+    "name": {
+      "$id": "#root/name",
+      "title": "Name",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "CQ_Huong-dan-BVDATN-K2017-dot-2.pdf"
+      ],
+      "pattern": "^.*$"
+    },
+    "course_id": {
+      "$id": "#root/course_id",
+      "title": "Course_id",
+      "type": "integer",
+      "examples": [
+        67
+      ],
+      "default": 0
+    },
+    "is_delete": {
+      "$id": "#root/is_delete",
+      "title": "Is_delete",
+      "type": "integer",
+      "examples": [
+        0
+      ],
+      "default": 0
+    },
+    "url": {
+      "$id": "#root/url",
+      "title": "Url",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "https://firebasestorage.googleapis.com/v0/b/becourseacademy.appspot.com/o/url%2Furl-1628435433590.pdf?alt=media&token=8fff497a-43ab-4856-9003-072b09f94760"
+      ],
+      "pattern": "^.*$"
+    }
+  }
+}
