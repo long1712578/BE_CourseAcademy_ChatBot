@@ -44,7 +44,8 @@ router.get('/:id', authMdw, async (req, res) => {
     return res.json(video);
 });
 
-router.post('/', authMdw,  require('../middlewares/validate.mdw')(schemaVideo),multerUpload.single('url'), async (req, res) => {
+// router.post('/', authMdw,  require('../middlewares/validate.mdw')(schemaVideo),multerUpload.single('url'), async (req, res) => {
+router.post('/', authMdw,multerUpload.single('url'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
         if (req.file) {

@@ -25,7 +25,8 @@ router.get('/preview/:id', async(req,res) => {
     return res.json(documents[0]);
 });
 
-router.post('/', authMdw, require('../middlewares/validate.mdw')(schemaDocument), multerUpload.single('url'), async (req, res) => {
+// router.post('/', authMdw, require('../middlewares/validate.mdw')(schemaDocument), multerUpload.single('url'), async (req, res) => {
+router.post('/', require('../middlewares/validate.mdw')(schemaDocument), multerUpload.single('url'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
         if (req.file) {

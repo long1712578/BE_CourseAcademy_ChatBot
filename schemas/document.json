@@ -5,9 +5,7 @@
   "title": "Root",
   "type": "object",
   "required": [
-    "course_id",
-    "is_delete",
-    "url"
+    "course_id"
   ],
   "properties": {
     "id": {

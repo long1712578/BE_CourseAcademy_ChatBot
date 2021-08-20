@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
     return res.json(result);
 });
 
-router.post('/', authMdw, require('../middlewares/validate.mdw')(schemaCourse),multerUpload.single('image'), async (req, res) => {
+router.post('/', authMdw,multerUpload.single('image'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
         console.log(data);
@@ -80,7 +80,8 @@ router.delete('/:id', authMdw, async (req, res) => {
     return res.json();
 });
 
-router.post('/:id/upload-video', authMdw, require('../middlewares/validate.mdw')(schemaVideo),async (req, res) => {
+// router.post('/:id/upload-video', authMdw, require('../middlewares/validate.mdw')(schemaVideo),async (req, res) => {
+router.post('/:id/upload-document',authMdw,async (req, res) => {
     const form = formidable({ multiples: true, keepExtensions: true });
     const courseId = req.params.id;
 
@@ -126,7 +127,8 @@ router.post('/:id/upload-video', authMdw, require('../middlewares/validate.mdw')
 
 });
 
-router.post('/:id/upload-document', authMdw,  require('../middlewares/validate.mdw')( require('../middlewares/validate.mdw')(schemaDocument)),async (req, res) => {
+// router.post('/:id/upload-document', authMdw,require('../middlewares/validate.mdw')(schemaDocument),async (req, res) => {
+router.post('/:id/upload-document', authMdw,async (req, res) => {
     const form = formidable({ multiples: true, keepExtensions: true });
     const courseId = req.params.id;
 
