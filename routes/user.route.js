@@ -11,8 +11,8 @@ var transporter = nodemailer.createTransport({
 });
 const jwt = require('jsonwebtoken');
 const optSecret = require('../config/auth.config');
-const userModel = require('../Models/user.model');
-const schemaUser= require('../schemas/user.json');
+const userModel = require('../models/user.model');
+const schemaUser = require('../schemas/user.json');
 const { multerUpload, isValidFileImage } = require('../utils/upload');
 const uploadFileToFirebase = require('../utils/firebase');
 
@@ -38,7 +38,7 @@ router.get('/check-username', async (req, res) => {
 })
 
 //signup
-router.post('/',  require('../middlewares/validate.mdw')(schemaUser),async (req, res) => {
+router.post('/', require('../middlewares/validate.mdw')(schemaUser), async (req, res) => {
     const user1 = req.body;
     const user = { ...user1, role_id: 1 };
     console.log('user', user);
