@@ -115,7 +115,7 @@ router.put('/:id', multerUpload.single('avatar'), async (req, res) => {
         data.avatar = url;
     }
     const result = await userModel.updateUser(id, data);
-    if (result == null) res.status(400).json({ message: "Username is exist" });
+    if (result == null) res.status(400).json({ message: "Username doesn't exist" });
     if (result > 0) res.status(200).json({ message: result + " row change" });
     else res.status(202).json({ message: "No change" });
 });
@@ -133,7 +133,7 @@ router.put('/:id/password', async (req, res) => {
     };
     const password = bcrypt.hashSync(newPass, 10);
     const result = await userModel.updateUser(id, { password: password });
-    if (result > 0) res.status(200).json({ message: "Chang success" });
+    if (result > 0) res.status(200).json({ message: "Change success" });
     else res.status(400).json({ message: "Change fail" });
 
 })
@@ -141,7 +141,7 @@ router.put('/:id/password', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const id = req.params.id * 1 || 0;
     const result = await userModel.delete(id);
-    if (result == null) res.status(400).json({ message: "User is exist" });
+    if (result == null) res.status(400).json({ message: "User doesn't exist" });
     if (result > 0) res.status(200).json({ message: result + " row change" });
     else res.status(202).json({ message: "No change" });
 })
