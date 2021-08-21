@@ -5,7 +5,7 @@ const courseModel = require('../models/course.model');
 const router = express.Router();
 
 const DEFAULT_VERIFY_TOKEN = 'nttung';
-const PAGE_ACCESS_TOKEN = "EAADPi4f7imIBAEfK7LflyFZB0Sl7JDLngXx8mfXxglBASOFv03jIIkqUvZB3FgYOpOPkIS9ZA52GfF8TMrZCSploYT9wGTvQ6YnOs963LgUZAWwTGlxPp7yTfDzCc55o0cuFUMfiVYTsQHG0btzZC9AxpZBXk7SoPxmsy7yrhTwzAlhaqUlhV9t";
+const PAGE_ACCESS_TOKEN = "EAADPi4f7imIBAHZA2R1puU3V9ncbfZBytG4cvJ018L67hIPKFNQmXuoikJrnpSbZCmUxedi3K98maX3vIDFlWZATdL6zSyX5A5HZCittgEjpFSWZAZBQGWr88gjZCcZBjABLJuE88ZAsGZBtIKXelSFJEsgr4wwhGBjgqAtTYQe2ZCgUVFRe3NL4BxCz";
 const KEYWORD_SEARCH = ['category', 'EIFS', 'Casework', 'Span', 'it'];
 
 // Creates the endpoint for our webhook 

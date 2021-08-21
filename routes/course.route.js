@@ -53,7 +53,7 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', authMdw, multerUpload.single('image'), async (req, res) => {
     try {
         const id = parseInt(req.params.id);
-        const data = { ...req.body, is_delete: false };
+        const data = req.body;
         if (req.file) {
             if (!isValidFileImage(req.file.originalname, req.file.mimetype)) {
                 return res.status(400).json({ 'message': "Please upload file image type was accepted include png, jpg, jpeg!!" })
