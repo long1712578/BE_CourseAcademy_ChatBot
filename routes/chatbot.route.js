@@ -5,7 +5,7 @@ const courseModel = require('../models/course.model');
 const router = express.Router();
 
 const DEFAULT_VERIFY_TOKEN = 'nttung';
-const PAGE_ACCESS_TOKEN = "EAADPi4f7imIBAF54XueaoVz4HWmf6WcobulhZBZCzIC4K3j4eoY66BzBHHtjJtbWeHQrLbnStVKJJUZCVZBiFuTbPlXtdQ837GKxCZCXWZBVlShnilg34lfYKSHZCyUmeUROzMLoHlYxMm9Qe1wHuLbMK6LPk4SB2bpA0sIANLncweiRGLynvZBU";
+const PAGE_ACCESS_TOKEN = "EAADPi4f7imIBABogk0ALqZC7ZBZClZBcti6cQ0D8Ftv6dQRhRZAsFEXnEiL6El0PcnTYNZCwmbbQIIMRqZAJldcuKK5gZAGeFFOVJUEqOtP0qJihX2MRHocAVWQB3atPdWPbiMFFqahfaxvPdxe4ALugbSzfeGMZAWiXybcw75bZAu97pprQvpYeBA";
 const KEYWORD_SEARCH = ['category', 'EIFS', 'Casework', 'Span', 'it'];
 
 // Creates the endpoint for our webhook 
@@ -416,7 +416,7 @@ const sendCourseList = (sender_psid, filter) => {
                     let course = el['course'];
                     return {
                         "title": course.name,
-                        "image_url": "https://tinyurl.com/imageCourse",
+                        "image_url": course.image || "https://tinyurl.com/imageCourse",
                         "subtitle": course.price.toString(),
 
                         "buttons": [
@@ -472,7 +472,7 @@ const sendDetailCourse = (sender_psid, id) => {
                         "elements": [
                             {
                                 "title": `Name: ${course.name}`,
-                                "image_url": "https://tinyurl.com/imageCourse",
+                                "image_url": `${course.url}` || "https://tinyurl.com/imageCourse",
                                 "subtitle": `Price: ${course.price}\nView: ${course.view}\nRating: ${course.rating_average}`,
                                 "buttons": [
                                     {

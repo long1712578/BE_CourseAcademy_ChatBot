@@ -53,18 +53,18 @@ app.use('/api/sign-in', require('./routes/auth.route'));
 app.use('/api/admin-sign-in', require('./routes/auth.route'));
 
 // admin
-app.use('/api/admin', authMdw,require('./routes/user.admin.route'));
+app.use('/api/admin', authMdw, require('./routes/user.admin.route'));
 app.use('/api/categories', require('./routes/category.route'));
-app.use('/api/fields',authMdw, require('./routes/field.route'));
+app.use('/api/fields', authMdw, require('./routes/field.route'));
 app.use('/api/courses', require('./routes/course.route'));
-app.use('/api/users',authMdw, require('./routes/user.route'));
+app.use('/api/users', authMdw, require('./routes/user.route'));
 app.use('/api/videos', require('./routes/video.route'));
-app.use('/api/orders',authMdw, require('./routes/course_order.route'));
-app.use('/api/roles',authMdw, require('./routes/role.route'));
+app.use('/api/orders', authMdw, require('./routes/course_order.route'));
+app.use('/api/roles', authMdw, require('./routes/role.route'));
 app.use('/api/guest-course', require('./routes/anonymous/course.route'));
 app.use('/api/documents', require('./routes/document.route'));//,authMdw
 app.use('/api/comments', require('./routes/rating.route'));
-app.use('/api/chatbot',authMdw, require('./routes/chatbot.route'));
+app.use('/api/chatbot', require('./routes/chatbot.route'));
 
 app.get('/err', function (req, res) {
   throw new Error('Error!');
