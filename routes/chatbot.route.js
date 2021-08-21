@@ -5,7 +5,7 @@ const courseModel = require('../models/course.model');
 const router = express.Router();
 
 const DEFAULT_VERIFY_TOKEN = 'nttung';
-const PAGE_ACCESS_TOKEN = "EAADPi4f7imIBAHZA2R1puU3V9ncbfZBytG4cvJ018L67hIPKFNQmXuoikJrnpSbZCmUxedi3K98maX3vIDFlWZATdL6zSyX5A5HZCittgEjpFSWZAZBQGWr88gjZCcZBjABLJuE88ZAsGZBtIKXelSFJEsgr4wwhGBjgqAtTYQe2ZCgUVFRe3NL4BxCz";
+const PAGE_ACCESS_TOKEN = "EAADPi4f7imIBAESjzim3lx0cFQo55sHzFTFwCQPrpFZAUsz9d8HiX7IbBcA9Ex94ZATNosZBRo28ZAzZBOHtCsQs5YqmQ5TCDqbOnMb41M3Vff7NoNYIdxsz3iHQ5iowLlCsZCkTo2DFQx33cVHZBDNScG0mtP5JgS85VZAzTLKjXvJjedKKKQXQ";
 const KEYWORD_SEARCH = ['react', 'web development', 'ios', 'swift', 'bootcamp', 'javascript', 'android'];
 
 // Creates the endpoint for our webhook 
@@ -475,7 +475,7 @@ const sendDetailCourse = (sender_psid, id) => {
                             {
                                 "title": `Name: ${course.name}`,
                                 "image_url": img,
-                                "subtitle": `Price: ${course.price}\nView: ${course.view}\nRating: ${course.rating_average}`,
+                                "subtitle": `Price: ${course.price}\nView: ${course.view}\nRating: ${course.rating_average}\nDescription: ${course.description}`,
                                 "buttons": [
                                     {
                                         "type": "postback",
