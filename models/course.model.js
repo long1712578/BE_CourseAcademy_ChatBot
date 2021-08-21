@@ -11,12 +11,19 @@ module.exports = {
             search = "",
             ...otherParams
         } = filter;
+
+        // where condition for course
+        let where = {}
+        for (let k in otherParams) {
+            where['course.' + k] = otherParams[k];
+        }
+
         const offset = (page - 1) * limit;
         const model = db
             .knex("course")
             .leftJoin("category", "course.category_id", "category.id")
             .leftJoin("user", "course.created_by", "user.id")
-            .where({ ...otherParams })
+            .where({ ...where })
             .orderBy(`course.${sort_by}`, sort_type)
             .where((qb) => {
                 search
