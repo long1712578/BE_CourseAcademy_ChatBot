@@ -5,7 +5,7 @@ const courseModel = require('../models/course.model');
 const router = express.Router();
 
 const DEFAULT_VERIFY_TOKEN = 'nttung';
-const PAGE_ACCESS_TOKEN = "EAADPi4f7imIBABogk0ALqZC7ZBZClZBcti6cQ0D8Ftv6dQRhRZAsFEXnEiL6El0PcnTYNZCwmbbQIIMRqZAJldcuKK5gZAGeFFOVJUEqOtP0qJihX2MRHocAVWQB3atPdWPbiMFFqahfaxvPdxe4ALugbSzfeGMZAWiXybcw75bZAu97pprQvpYeBA";
+const PAGE_ACCESS_TOKEN = "EAADPi4f7imIBAEfK7LflyFZB0Sl7JDLngXx8mfXxglBASOFv03jIIkqUvZB3FgYOpOPkIS9ZA52GfF8TMrZCSploYT9wGTvQ6YnOs963LgUZAWwTGlxPp7yTfDzCc55o0cuFUMfiVYTsQHG0btzZC9AxpZBXk7SoPxmsy7yrhTwzAlhaqUlhV9t";
 const KEYWORD_SEARCH = ['category', 'EIFS', 'Casework', 'Span', 'it'];
 
 // Creates the endpoint for our webhook 
@@ -368,6 +368,7 @@ const sendCategories = (sender_psid) => {
     return new Promise(async (resolve, reject) => {
         try {
             const categories = await categoryModel.all({ limit: 10 });
+            console.log(categories);
             const categoriesTemplate = categories.map((el) => {
                 return {
                     "title": el.name,
@@ -464,6 +465,7 @@ const sendDetailCourse = (sender_psid, id) => {
     return new Promise(async (resolve, reject) => {
         try {
             const course = await courseModel.single(id);
+            const img = course.image || "https://tinyurl.com/imageCourse";
             const response = {
                 "attachment": {
                     "type": "template",
@@ -472,7 +474,7 @@ const sendDetailCourse = (sender_psid, id) => {
                         "elements": [
                             {
                                 "title": `Name: ${course.name}`,
-                                "image_url": `${course.url}` || "https://tinyurl.com/imageCourse",
+                                "image_url": img,
                                 "subtitle": `Price: ${course.price}\nView: ${course.view}\nRating: ${course.rating_average}`,
                                 "buttons": [
                                     {

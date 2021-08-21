@@ -3,11 +3,11 @@ const moment = require('moment');
 const tbCategory = 'category';
 
 module.exports = {
-    async all() {
-       // const { limit = 999 } = filter;
-        return await db.knex('category');
+    async all(filter) {
+        const { limit = 999 } = filter;
+        return await db.knex('category').limit(limit);
     },
-    async getCategoryByFieldId (id){
+    async getCategoryByFieldId(id) {
         return await db.knex('category').where('field_id', id);
     },
     async add(category) {
