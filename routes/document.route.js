@@ -5,6 +5,7 @@ const uploadFileToFirebase = require('../utils/firebase');
 const { isValidFileDocument, multerUpload } = require('../utils/upload');
 const router = express.Router();
 const schemaDocument=require('../schemas/document.json');
+const { body, validationResult } = require('express-validator');
 
 router.get('/', authMdw, async (req, res) => {
     const filter = req.query;
@@ -26,7 +27,7 @@ router.get('/preview/:id', async(req,res) => {
 });
 
 // router.post('/', authMdw, require('../middlewares/validate.mdw')(schemaDocument), multerUpload.single('url'), async (req, res) => {
-router.post('/', require('../middlewares/validate.mdw')(schemaDocument), multerUpload.single('url'), async (req, res) => {
+router.post('/', authMdw, multerUpload.single('url'), async (req, res) => {
     try {
         const data = { ...req.body, is_delete: false };
         if (req.file) {
