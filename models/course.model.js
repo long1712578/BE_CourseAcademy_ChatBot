@@ -69,7 +69,7 @@ module.exports = {
         return db.knex(tbCourse).insert(course);
     },
     update(id, data) {
-        return db.knex(tbCourse).where({ id, is_delete: false }).update(data);
+        return db.knex(tbCourse).where({ id }).update(data);
     },
     save(data) {
         return db.knex(tbCourse).save(data);
