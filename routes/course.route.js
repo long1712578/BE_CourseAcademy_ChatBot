@@ -1,7 +1,7 @@
 const express = require('express');
 const authMdw = require('../middlewares/auth.mdw');
 
-const courseModel = require('../Models/course.model');
+const courseModel = require('../models/course.model');
 const fs = require("fs");
 const formidable = require("formidable");
 const mv = require("mv");
@@ -10,7 +10,7 @@ const { isValidFileVideo, getExtension, isValidFileDocument, multerUpload, isVal
 const videoModel = require('./../models/video.model');
 const documentModel = require('../models/document.model');
 const uploadFileToFirebase = require('../utils/firebase');
-const schemaCourse = require ('../schemas/course.json');
+const schemaCourse = require('../schemas/course.json');
 const schemaVideo = require('../schemas/video.json');
 const schemaDocument = require('../schemas/document.json');
 const router = express.Router();
@@ -62,7 +62,7 @@ router.put('/:id', authMdw, multerUpload.single('image'), async (req, res) => {
             data.image = url;
         }
         const result = await courseModel.update(id, data);
-        if (result == null) res.status(400).json({ message: "Course is exist" });
+        if (result == null) res.status(400).json({ message: "Course doesn't exist" });
         if (result > 0) res.status(200).json({ message: result + " row change" });
         else res.status(202).json({ message: "No change" });
     } catch (err) {
@@ -72,11 +72,10 @@ router.put('/:id', authMdw, multerUpload.single('image'), async (req, res) => {
 
 router.delete('/:id', authMdw, async (req, res) => {
     const id = parseInt(req.params.id);
-    const course = await courseModel.single(id);
-    if (course === null) {
-        return res.status(204);
-    }
-    await courseModel.delete(id);
+    const result = await courseModel.delete(id);
+    if (result == null) res.status(400).json({ message: "Course doesn't exist" });
+    if (result > 0) res.status(200).json({ message: result + " row change" });
+    else res.status(202).json({ message: "No change" });
     return res.json();
 });
 

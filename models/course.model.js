@@ -16,7 +16,7 @@ module.exports = {
             .knex("course")
             .leftJoin("category", "course.category_id", "category.id")
             .leftJoin("user", "course.created_by", "user.id")
-            .where({ ...otherParams, "course.is_delete": false })
+            .where({ ...otherParams })
             .orderBy(`course.${sort_by}`, sort_type)
             .where((qb) => {
                 search
